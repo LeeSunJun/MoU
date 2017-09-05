@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+// finish
+
 public class LoginActivity extends Activity {
     ArrayList<String> m_ID = new ArrayList<String>();
     ArrayList<String> m_PW = new ArrayList<String>();
