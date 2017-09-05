@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+
+    <!-- center located spot for get the center loc -->
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        tools:context="raydom.use_map.MapsActivity"/>
+
+    <ToggleButton
+        android:id="@+id/mGPS"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10sp"/>
+
+    <ToggleButton
+        android:id="@+id/mGeo"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_above="@+id/mGPS"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10sp"/>
+
+    <RelativeLayout
+        android:layout_width="450dp"
+        android:layout_height="200dp"
+        android:id="@+id/m_check2"
+        android:background="#FFFFFFFF"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp">
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/add_no"
+            android:onClick="add_ok_clicked"
+            android:text="Yes"
+            android:background="#FF006FFF"
+            android:layout_margin="10dp" />
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:id="@+id/add_no"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="add_no_clicked"
+            android:text="No"
+            android:background="#FF006FFF"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11pt"
+            android:layout_alignTop="@+id/m_check2"
+            android:text="Do you want to add A Marker on this Location?"
+            android:layout_margin="20dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/m_ID"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:background="#2F006FFF"
+        android:text=""
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id = "@+id/cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/image_border"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id = "@+id/webView"
+        android:visibility="gone" />
+
+</RelativeLayout>
