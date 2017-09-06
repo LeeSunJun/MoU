@@ -158,12 +158,13 @@ public class ParsingActivity extends Activity {
                 for (int i = 0; i < mark_info.length(); i++) {
 
                     JSONObject c = mark_info.getJSONObject(i);
+                    String ID = c.getString(TAG_ID);
                     String LT = c.getString(TAG_LT);
                     String LG = c.getString(TAG_LG);
                     String NAME = c.getString(TAG_TITLE);
                     String PNG = c.getString(TAG_PNG);
 
-                    //controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
+                    controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
                     total++;
 
                     if(i < 30) Log.d("total123",total + " : " + LT + " " + LG + " " + NAME + " " + PNG + " ");
