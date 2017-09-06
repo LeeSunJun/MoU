@@ -26,10 +26,6 @@ public class Setting extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
-        String nickName = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        TextView t = (TextView)findViewById(R.id.m_ID);
-        t.setText(nickName);
-        t.setTextSize(30);
 
         ImageButton ib = (ImageButton)findViewById(R.id.help_next);
         ib.setVisibility(View.GONE);
@@ -48,17 +44,12 @@ public class Setting extends Activity {
         }
 
         if (requestCode == 1) { // get the User ID that login
-            String resultMsg = data.getStringExtra("result_ID");
-
-            TextView t = (TextView)findViewById(R.id.m_ID);
-            t.setText(resultMsg);
-
-            Intent intent = new Intent();
-            intent.putExtra("result_ID",t.getText().toString());
-            setResult(RESULT_OK,intent);
-
             initialize();
         }
+    }
+
+    public void upload_clicked(View view){
+        Toast.makeText(Setting.this, "UploadClicked.", Toast.LENGTH_SHORT).show();
     }
 
     public void logout_clicked(View view){
@@ -91,7 +82,6 @@ public class Setting extends Activity {
 
         ImageButton ib = (ImageButton)findViewById(R.id.help_next);
         ib.setVisibility(View.VISIBLE);
-
     }
 
     public void help_next_clicked(View view) {
