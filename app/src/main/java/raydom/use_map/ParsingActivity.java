@@ -35,13 +35,6 @@ public class ParsingActivity extends Activity {
     SQLiteDatabase db; // MoU DB
     DBHandler controller; // DB Helper for MoU
 
-    ArrayList<String> m_lglist = new ArrayList<String>();
-    ArrayList<String> m_ltlist = new ArrayList<String>();
-    ArrayList<Integer> m_category = new ArrayList<Integer>();
-    ArrayList<String> m_title = new ArrayList<String>();
-    ArrayList<String> m_png = new ArrayList<String>();
-    ArrayList<Integer> m_MarkID = new ArrayList<Integer>();
-
     String myJSON;
     JSONArray mark_info = null;
 
@@ -53,6 +46,7 @@ public class ParsingActivity extends Activity {
     private static final String TAG_LG = "longitude";
     private static final String TAG_TITLE = "name";
     private static final String TAG_PNG = "url";
+    private static final String TAG_ID ="id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -60,16 +54,15 @@ public class ParsingActivity extends Activity {
 
         controller = new DBHandler(getApplicationContext());
 
+        getData("http://52.79.121.208/publicdata/toilet1.php",1);
 
-        getData("http://52.78.244.95/publicdata/toilet1.php",1);
+        /*getData("http://52.79.121.208/publicdata/toilet2.php",1);
 
-        getData("http://52.78.244.95/publicdata/toilet2.php",1);
+        getData("http://52.79.121.208/publicdata/wifi.php",2);
 
-        getData("http://52.78.244.95/publicdata/wifi.php",2);
+        getData("http://52.79.121.208/publicdata/smoking.php",3);
 
-        getData("http://52.78.244.95/publicdata/smoking.php",3);
-
-        getData("http://52.78.244.95/publicdata/statue.php",4);
+        getData("http://52.79.121.208/publicdata/statue.php",4);*/
 
         //initialize();
 
@@ -148,12 +141,19 @@ public class ParsingActivity extends Activity {
      */
     public void parse_php(int category) {
 
-        try {
+        Log.d("JUN", "length 0    " + myJSON);
+        Log.d("JUN", "length 1    " + myJSON.length());
 
+        try {
+                Log.d("JUN", "length 2   " + myJSON.length());
                 JSONArray JA = new JSONArray(myJSON);
+                //JSONObject JA = new JSONObject(myJSON);
+                Log.d("JUN", "length 3    " + myJSON.length());
                 //JSONArray JA = new JSONArray(tmp_json.get(j));
 
                 mark_info = JA;
+
+                Log.d("JUN", "length 4    " + JA);
 
                 for (int i = 0; i < mark_info.length(); i++) {
 
@@ -163,34 +163,16 @@ public class ParsingActivity extends Activity {
                     String NAME = c.getString(TAG_TITLE);
                     String PNG = c.getString(TAG_PNG);
 
-                    controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
+                    //controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
                     total++;
 
-                    Log.d("total123",total + " : " + LT + " " + LG + " " + NAME + " " + PNG + " ");
+                    if(i < 30) Log.d("total123",total + " : " + LT + " " + LG + " " + NAME + " " + PNG + " ");
 
-                    /*
-                    m_lglist.add(LG);
-                    m_ltlist.add(LT);
-                    m_category.add(category);
-                    m_title.add(NAME);
-                    m_png.add(PNG);*/
                 }
-
-                /*
-                Intent intent = new Intent();
-
-                intent.putStringArrayListExtra("result_lglist", m_lglist);
-                intent.putStringArrayListExtra("result_ltlist", m_ltlist);
-                intent.putIntegerArrayListExtra("result_category", m_category);
-                intent.putStringArrayListExtra("result_NAME", m_title);
-                intent.putStringArrayListExtra("result_PNG", m_png);
-
-                setResult(RESULT_OK, intent);
-                initialize();
-                */
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("JUN", e.toString());
         }
     }
 
@@ -215,13 +197,15 @@ public class ParsingActivity extends Activity {
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
 
-                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream() , "UTF-8"));
                     String json;
 
                     while ((json = bufferedReader.readLine()) != null) {
+                        //Log.d("JUN", "length 0    " + json);
                         sb.append(json);
-                        Log.d("JUN", "length " + sb.toString().length());
                     }
+
+                    //Log.d("JUN", "length 1    " + sb.toString());
 
                     return sb.toString().trim();
 
@@ -233,6 +217,7 @@ public class ParsingActivity extends Activity {
             @Override
             protected void onPostExecute(String result) {
                 myJSON = result;
+                //Log.d("JUN", "length 0    " + myJSON);
                 parse_php(category);
             }
         }
