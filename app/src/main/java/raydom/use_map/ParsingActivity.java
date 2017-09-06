@@ -164,7 +164,7 @@ public class ParsingActivity extends Activity {
                     String NAME = c.getString(TAG_TITLE);
                     String PNG = c.getString(TAG_PNG);
 
-                    //total will be change to ID from server
+                    //total will be change to ID from server !!!
                     controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
                     total++;
 
