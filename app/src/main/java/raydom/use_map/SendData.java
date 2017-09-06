@@ -26,6 +26,8 @@ public class SendData {
     String LT_TAG = "longitude"; //longitude
     String LG_TAG = "latitude"; //latitude
 
+    String CT_TAG = "category";
+
     String uID_TAG = "ID"; //id
     String uPW_TAG = "PW"; //pw
 
@@ -219,6 +221,7 @@ public class SendData {
         }
     }
 
+    //send LT,LG and options for adding marker
     public void sendData3(String url, String latitude, String longitude, String name, String op1, String op2, String file){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
@@ -343,6 +346,83 @@ public class SendData {
         }
     }
 
+    //send LT,LG,CT for getting gpa
+    public void sendData4(String url, String latitude, String longitude, String category){
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+                    OutputStream os = conn.getOutputStream();
+                    os.write( outputInBytes );
+                    os.close();
+
+                    int retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    String res = response.toString();
+
+                    Log.d("Ray","result 2 : "+res);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(LT_TAG, latitude);
+                jsonObject.put(LG_TAG, longitude);
+                jsonObject.put(CT_TAG, category);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            new HttpUtil().execute(url,json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //send information about users for sign up
     public void sendData5(String url, String name, String id, String pw, String mail, String birth, String gender, String phone){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
