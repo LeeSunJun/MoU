@@ -96,6 +96,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private float[] mRotationMatrix = new float[9]; // get rotation value
     private SensorManager sensorManager; //to manage sensor
     private Sensor sensor; // sensor
+    float bearing;
 
     Geocoder geocoder;
     EditText et;
@@ -215,8 +216,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                     }
                     else{
-
                         sensorManager.unregisterListener(mSensorEventListener);
+                        updatemap(180-bearing);
                     }
                 }catch(SecurityException ex){
 
@@ -338,7 +339,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values); // store event value to matrix
                 float[] orientation = new float[3]; // for orientation
                 SensorManager.getOrientation(mRotationMatrix,orientation);//make matrix oriented
-                float bearing = (float)Math.toDegrees(orientation[0])+mDeclination; //caculate bearing
+                bearing = (float)Math.toDegrees(orientation[0])+mDeclination; //caculate bearing
 
                 if(mGeo.isChecked()) {
                     updatemap(bearing); //change map
