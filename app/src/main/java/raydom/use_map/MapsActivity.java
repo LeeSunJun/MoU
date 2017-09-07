@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AlertDialogLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,6 +112,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private SensorManager sensorManager; //to manage sensor
     private Sensor sensor; // sensor
     float bearing;
+    String marker_name;
+    EditText text;
 
     Geocoder geocoder;
     EditText et;
@@ -653,9 +656,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
        addMarkerDialog();
     }
 
-    private void addMarkerDialog(){
+    private void addMarkerDialog(){ // Select my position marker or exist market
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-        alt_bld.setMessage("What type of marker do you want to add?").setCancelable(false)
+        alt_bld
+                .setMessage("What type of marker do you want to add?")
+                .setCancelable(false)
                 .setPositiveButton("My Position", new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dialog, int id){ // left button
                         View v = null; // for call menu_clicked
@@ -664,35 +669,76 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                         double longitude = here.getPosition().longitude;
                         Toast.makeText(getApplicationContext(), ""+latitude+longitude , Toast.LENGTH_SHORT).show();
                         dialog.cancel();
+                        getMarkerName();
                     }
                 })
                 .setNegativeButton("Exist marker",new DialogInterface.OnClickListener(){
-                     public void onClick(DialogInterface dialog, int id){ // right button
+                     public void onClick(DialogInterface dialog, int id) { // right button
                          View v = null; // for call menu_clicked
                          menu_clicked(v);
                          selectMarkerTypeDialog();
                          dialog.cancel();
-            }
-        });
+                     }
+                });
         AlertDialog alert = alt_bld.create();
         alert.setTitle("Select Type");
         alert.setIcon(R.drawable.main_logo);
         alert.show();
     }
 
-    private void selectMarkerTypeDialog(){
-        final CharSequence[] type = {"TOILET", "WIFI","SMOKING AREA"};
+    private void selectMarkerTypeDialog(){ //Select market type
+        final String[] type = {"TOILET", "WIFI","SMOKING AREA","STATUE OF GIRL"};
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
         alt_bld.setTitle("Select Marker Type");
         alt_bld.setIcon(R.drawable.main_logo);
         alt_bld.setSingleChoiceItems(type, -1, new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int item){
                 Toast.makeText(getApplicationContext(), "type is " + type[item], Toast.LENGTH_SHORT).show();
+                if(type[item].compareTo("TOILET") == 0){ // toilet selected
+                    category = 1;
+                    show_mark(category);
+
+                }else if(type[item].compareTo("WIFI") == 0){ // wifi selected
+                    category = 2;
+                    show_mark(category);
+                }else if(type[item].compareTo("SMOKING AREA") == 0){ // smoking area selected
+                    category = 3;
+                    show_mark(category);
+                }else if(type[item].compareTo("STATUE OF GIRL") == 0){ // statue of girl selected
+                    category = 4;
+                    show_mark(category);
+                }
                 dialog.cancel();
             }
         });
         AlertDialog alert = alt_bld.create();
         alert.show();
+    }
+
+    private void getMarkerName(){
+        LayoutInflater li = LayoutInflater.from(context);
+        View v = li.inflate(R.layout.input_name_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(v);
+
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        text = (EditText) findViewById(R.id.editTextDialogUserInput);
+                        marker_name  = text.getText().toString(); // store input to narkername variance
+                        Toast.makeText(getApplicationContext(), "name is "+marker_name, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void getAppKeyHash() {
