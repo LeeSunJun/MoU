@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AlertDialogLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -725,7 +724,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 .setCancelable(false)
                 .setPositiveButton("OK",
                 new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
+                    public void onClick(DialogInterface dialog, int num){
                         text = (EditText) findViewById(R.id.editTextDialogUserInput);
                         marker_name  = text.getText().toString(); // store input to narkername variance
                         Toast.makeText(getApplicationContext(), "name is "+marker_name, Toast.LENGTH_SHORT).show();
@@ -733,7 +732,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
+                            public void onClick(DialogInterface dialog, int num){
                                 dialog.cancel();
                             }
                         });
