@@ -244,6 +244,26 @@
                         android:layout_marginLeft="30dp"
                         android:orientation="vertical">
 
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/gray_button_click"
+                            android:textSize="25sp"
+                            android:textAlignment="viewStart"
+                            android:text="Book Marker"
+                            android:onClick="Bookmark_b_clicked"/>
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/gray_button_click"
+                            android:textSize="25sp"
+                            android:textAlignment="viewStart"
+                            android:text="Personal Marker"
+                            android:onClick="personal_b_clicked"/>
+
                     </LinearLayout>
 
                 </LinearLayout>

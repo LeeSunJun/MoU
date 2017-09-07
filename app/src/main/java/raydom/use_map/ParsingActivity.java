@@ -54,15 +54,13 @@ public class ParsingActivity extends Activity {
 
         controller = new DBHandler(getApplicationContext());
 
-        getData("http://52.79.121.208/publicdata/toilet.php",1);
+        //getData("http://52.79.121.208/publicdata/toilet.php",1);
 
-        /*getData("http://52.79.121.208/publicdata/toilet2.php",1);
-
-        getData("http://52.79.121.208/publicdata/wifi.php",2);
+        //getData("http://52.79.121.208/publicdata/wifi.php",2);
 
         getData("http://52.79.121.208/publicdata/smoking.php",3);
 
-        getData("http://52.79.121.208/publicdata/statue.php",4);*/
+        //getData("http://52.79.121.208/publicdata/statue.php",4);
 
         //initialize();
 
@@ -137,7 +135,7 @@ public class ParsingActivity extends Activity {
     }
 
     /*
-     *php server 로부터 json 형식으로 데이터를 받아올때 tag 구분하여 Arraylist에 저장
+     *php server 로부터 json 형식으로 데이터를 받아올때 tag 구분하여 DB에 저장
      */
     public void parse_php(int category) {
 
@@ -165,10 +163,11 @@ public class ParsingActivity extends Activity {
                     String PNG = c.getString(TAG_PNG);
 
                     //total will be change to ID from server !!!
-                    controller.insert(total, Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
+                    controller.insert(Integer.parseInt(ID), Double.parseDouble(LT), Double.parseDouble(LG), NAME, PNG, 0, category);
                     total++;
 
-                    if(i < 30) Log.d("total123",total + " : " + LT + " " + LG + " " + NAME + " " + PNG + " ");
+                    if(i < 30)
+                        Log.d("total123",total + " : " + LT + " " + LG + " " + NAME + " " + PNG + " ");
 
                 }
 
@@ -226,7 +225,7 @@ public class ParsingActivity extends Activity {
         GetDataJSON g = new GetDataJSON();
         g.execute(url);
 
-        }
+    }
 
     private void initialize(){
         Handler handler = new Handler(){

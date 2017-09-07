@@ -18,15 +18,15 @@ import java.net.URL;
  */
 
 public class SendData {
-    int type = -1; // 1 : logininfo(should be develope the control of login)
-                  // 2 : adding info
-                  // 3 : comment
-                  // 4 : sign up
+    int type = -1; // 1 : toilet
+                   // 2 : wifi
+                   // 3 : smoking
+                   // 4 : landmark
 
     String LT_TAG = "longitude"; //longitude
     String LG_TAG = "latitude"; //latitude
 
-    String CT_TAG = "category";
+    String ID_TAG = "keyid";
 
     String uID_TAG = "ID"; //id
     String uPW_TAG = "PW"; //pw
@@ -347,7 +347,7 @@ public class SendData {
     }
 
     //send LT,LG,CT for getting gpa
-    public void sendData4(String url, String latitude, String longitude, String category){
+    public void sendData4(String url, int id){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
 
@@ -406,9 +406,7 @@ public class SendData {
             JSONObject jsonObject = new JSONObject();
 
             try {
-                jsonObject.put(LT_TAG, latitude);
-                jsonObject.put(LG_TAG, longitude);
-                jsonObject.put(CT_TAG, category);
+                jsonObject.put(ID_TAG, id);
             }catch (JSONException e){
 
             }

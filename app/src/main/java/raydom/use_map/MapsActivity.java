@@ -18,6 +18,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -48,9 +49,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kakao.auth.Session;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback {
@@ -74,6 +82,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     boolean mark_info_open = false;
 
     SendData send_mark;
+
+    String myJSON;
+
+    String gpa_url_send;
+    String gpa_url_get;
+    String gpa_num;
 
     ImageView mark_image;
 
@@ -402,6 +416,27 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                     tmp_marker = marker;
 
+                    Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
+                    startManagingCursor(c);
+
+                    c.moveToNext();
+                    int id = c.getInt(c.getColumnIndex("id"));
+
+                    Log.d("review","id : "+id);
+
+                    SendData tmp_send = new SendData();
+                    tmp_send.sendData4(gpa_url_send,id);
+/*
+                    while(tmp_send.get_check() == -1) {
+                        ;
+                    }
+
+                    getData(gpa_url_get);
+
+                    TextView m_n;
+                    m_n = (TextView)findViewById(R.id.mark_name);
+                    m_n.setText(gpa_num);
+*/
                     //마커 정보 보여주는 listener 구현 부
                     Picasso.with(context)
                             .load(get_url(marker.getPosition().latitude,marker.getPosition().longitude))
@@ -537,6 +572,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         if(drawer.getVisibility() == View.VISIBLE)
             drawer.setVisibility(View.GONE);
+
+        gpa_url_send = "http://52.79.121.208/review/Psmoke_review_mark.php";
+        gpa_url_get = "http://52.79.121.208/review/smoke_review_send.php";
     }
 
     public void SOG_b_clicked(View v){
@@ -808,18 +846,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-    public void copy_StoD_list(ArrayList<Double> a,ArrayList<String> b) {
-        for(int i = 0 ; i < b.size() ; i ++) {
-            a.add(Double.parseDouble(b.get(i)));
-        }
-    }
-
-    public void copy_ItoI_list(ArrayList<Integer> a,ArrayList<Integer> b) {
-        for(int i = 0 ; i < b.size() ; i ++) {
-            a.add(b.get(i));
-        }
-    }
-
     // delete
     public void delete (double id) {
         db = helper.getWritableDatabase();
@@ -909,5 +935,92 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
 
         return "No Name";
+    }
+
+    /*
+     * anysc task 방식으로 php와의 통신(데이터를 받아옴)
+     */
+    public void getData(String url) {
+
+        class GetDataJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream() , "UTF-8"));
+                    String json;
+
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json);
+                    }
+
+                    return sb.toString().trim();
+
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                myJSON = result;
+
+                gpa_num = parse_gpa();
+            }
+        }
+        GetDataJSON g = new GetDataJSON();
+        g.execute(url);
+
+    }
+
+    public String parse_gpa() {
+
+        String gpa = " ";
+
+        try {
+            JSONArray JA = new JSONArray(myJSON);
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                gpa = c.getString("gpa");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
+        }
+
+        return gpa;
+    }
+
+    public String parse_reviews() {
+
+        String gpa = " ";
+
+        try {
+            JSONArray JA = new JSONArray(myJSON);
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                gpa = c.getString("gpa");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
+        }
+
+        return gpa;
     }
 }

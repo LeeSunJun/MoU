@@ -1,6 +1,5 @@
 package raydom.use_map;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -32,6 +31,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                     "latitude real, " +
                     "name text, " +
                     "url text, " +
+                    "bm integer, " +
+                    "category integer);";
+
+            db.execSQL(sql);
+
+            sql = "create table personal (" +
+                    "longitude real, " +
+                    "latitude real, " +
+                    "name text, " +
                     "bm integer, " +
                     "category integer);";
 

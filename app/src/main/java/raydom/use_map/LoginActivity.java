@@ -100,7 +100,7 @@ public class LoginActivity extends Activity {
     *login_Clicked 에서 호출
      */
     public boolean check_id_pw() {         //ID,PW 검사
-        send_login.sendData1("http://52.78.244.95/login.php", ID.getText().toString(), PW.getText().toString());
+        send_login.sendData1("http://52.79.121.208/login.php", ID.getText().toString(), PW.getText().toString());
 
         while(send_login.get_check() == -1) {
             ;

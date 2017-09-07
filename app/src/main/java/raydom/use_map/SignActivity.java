@@ -90,7 +90,7 @@ public class SignActivity extends Activity {
         edit = (EditText)findViewById(R.id.phone_in);
         phone_number = edit.getText().toString();
 
-        send.sendData5("http://52.78.244.95/join/temp.php",name,id,pw,mailAddress,birthdate,gender,phone_number);
+        send.sendData5("http://52.79.121.208/join/temp.php",name,id,pw,mailAddress,birthdate,gender,phone_number);
         Log.d("1515","signal : "+send.get_check());
 
         while(send.get_check() == -1) {
