@@ -611,29 +611,50 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             getClick();
         }
     }
+     public void bm_add_clicked(View v) {
+       addMarkerDialog();
+    }
 
-    public void bm_add_clicked(View v) {
-        AlertDialog.Builder d = new AlertDialog.Builder(this);
-
-        d.setMessage("Which");
-        d.setPositiveButton("예", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                // process전체 종료
-                finish();
+    private void addMarkerDialog(){
+        AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+        alt_bld.setMessage("What type of marker do you want to add?").setCancelable(false)
+                .setPositiveButton("My Position", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){ // left button
+                        View v = null; // for call menu_clicked
+                        menu_clicked(v);
+                        double latitude = here.getPosition().latitude;
+                        double longitude = here.getPosition().longitude;
+                        Toast.makeText(getApplicationContext(), ""+latitude+longitude , Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Exist marker",new DialogInterface.OnClickListener(){
+                     public void onClick(DialogInterface dialog, int id){ // right button
+                         View v = null; // for call menu_clicked
+                         menu_clicked(v);
+                         selectMarkerTypeDialog();
+                         dialog.cancel();
             }
         });
-        d.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+        AlertDialog alert = alt_bld.create();
+        alert.setTitle("Select Type");
+        alert.setIcon(R.drawable.main_logo);
+        alert.show();
+    }
+
+    private void selectMarkerTypeDialog(){
+        final CharSequence[] type = {"TOILET", "WIFI","SMOKING AREA"};
+        AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+        alt_bld.setTitle("Select Marker Type");
+        alt_bld.setIcon(R.drawable.main_logo);
+        alt_bld.setSingleChoiceItems(type, -1, new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int item){
+                Toast.makeText(getApplicationContext(), "type is " + type[item], Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });
-        d.show();
-
-        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
-
-        if(drawer.getVisibility() == View.VISIBLE)
-            drawer.setVisibility(View.GONE);
+        AlertDialog alert = alt_bld.create();
+        alert.show();
     }
 
     private void getAppKeyHash() {

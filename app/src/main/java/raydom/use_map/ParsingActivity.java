@@ -54,7 +54,7 @@ public class ParsingActivity extends Activity {
 
         controller = new DBHandler(getApplicationContext());
 
-        getData("http://52.79.121.208/publicdata/toilet1.php",1);
+        getData("http://52.79.121.208/publicdata/toilet.php",1);
 
         /*getData("http://52.79.121.208/publicdata/toilet2.php",1);
 
