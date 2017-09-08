@@ -85,13 +85,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     String myJSON;
 
-    String myName;
-    String myID;
-
     String userPic;
 
     String gpa_url_send;
-    String gpa_url_get;
 
     ImageView mark_image;
 
@@ -444,6 +440,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     SendData tmp_send = new SendData();
                     String res = tmp_send.sendData4(gpa_url_send,markid);
 
+                    Log.d("review","here");
+
                     if(!parse_gpa(res).isEmpty()) {
                         show_stars(Double.parseDouble(parse_gpa(res)));
                     }
@@ -586,8 +584,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         if(drawer.getVisibility() == View.VISIBLE)
             drawer.setVisibility(View.GONE);
 
-        gpa_url_send = "http://52.79.121.208/review/smoke/Psmoke_review_mark.php";
-        gpa_url_get = "http://52.79.121.208/review/smoke/smoke_review_send.php";
+        gpa_url_send = "http://52.79.121.208/review/smoke/smoke_review_mark.php";
     }
 
     public void SOG_b_clicked(View v){

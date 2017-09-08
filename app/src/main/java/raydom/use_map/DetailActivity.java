@@ -175,6 +175,21 @@ public class DetailActivity extends Activity {
     public void review_submit_clicked(View v) {
         review = cm.toString();
 
+        SendData sendReview = new SendData();
+
         this.finish();
+    }
+
+    public String get_url(int category) {
+        if(category == 1)
+            return "http://52.79.121.208/review/toilet/toilet_review_write.php";
+        else if (category == 2)
+            return "http://52.79.121.208/review/wifi/wifi_review_write.php";
+        else if (category == 3)
+            return "http://52.79.121.208/review/smoke/smoke_review_write.php";
+        else if (category == 4)
+            return "http://52.79.121.208/review/statue/statue_review_write.php";
+
+        return "";
     }
 }

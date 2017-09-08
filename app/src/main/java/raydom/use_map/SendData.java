@@ -45,9 +45,9 @@ public class SendData {
     String sign_gender_TAG = "sex";
     String sign_phone_TAG = "PhoneNumber";
 
-    String user_ID_TAG = "user_ID";
+    String user_ID_TAG = "userID";
     String mark_ID_TAG = "markID";
-    String gpa_TAG = "gpa";
+    String gpa_TAG = "GPA";
     String review_TAG = "review";
 
     int check = -1;
