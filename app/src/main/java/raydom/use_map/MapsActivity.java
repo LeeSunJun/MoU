@@ -157,6 +157,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             Toast.makeText(this, "Marker Adding is success", Toast.LENGTH_SHORT).show();
         } else if( requestCode == 7){
             userPic = data.getStringExtra("profilePic");
+            ImageView iv = (ImageView) findViewById(R.id.profilPic);
+            Picasso.with(context)
+                    .load(userPic)
+                    .transform(new CropCircleTransformation())
+                    .into(iv);
             Log.d("UserProfile", "maps url is " + userPic);
         }
     }
@@ -637,27 +642,31 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void DIY_add_clicked(View v){
+        if(ID.compareTo("Guest") != 0) {
 
-        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
+            LinearLayout drawer = (LinearLayout) findViewById(R.id.drawer);
 
-        if(drawer.getVisibility() == View.VISIBLE)
-            drawer.setVisibility(View.GONE);
+            if (drawer.getVisibility() == View.VISIBLE)
+                drawer.setVisibility(View.GONE);
 
-        if(Session.getCurrentSession().isClosed()){
-            Intent intent = new Intent(getBaseContext(), kakaoActivity.class);
-            startActivityForResult(intent, 7);
-            //startActivity(intent);
-        }else {
+            if (Session.getCurrentSession().isClosed()) {
+                Intent intent = new Intent(getBaseContext(), kakaoActivity.class);
+                startActivityForResult(intent, 7);
+                //startActivity(intent);
+            } else {
 
-            Toast.makeText(this,"Click screen you want to add",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Click screen you want to add", Toast.LENGTH_SHORT).show();
 
-            mMap.clear();
+                mMap.clear();
 
-            View t = findViewById(R.id.cover);
-            t.setVisibility(View.VISIBLE);
-            view_invisible();
+                View t = findViewById(R.id.cover);
+                t.setVisibility(View.VISIBLE);
+                view_invisible();
 
-            getClick();
+                getClick();
+            }
+        }else{
+            Toast.makeText(this, "You have to log in with Mou ID", Toast.LENGTH_LONG).show();
         }
     }
      public void bm_add_clicked(View v) {
@@ -899,6 +908,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         intent.putExtra("UserID", ID);
         intent.putExtra("MarkID", Integer.toString(markid));
         intent.putExtra("Category", Integer.toString(category));
+        intent.putExtra("UserPic", userPic);
         Log.d("Url_send",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
 
         startActivity(intent);

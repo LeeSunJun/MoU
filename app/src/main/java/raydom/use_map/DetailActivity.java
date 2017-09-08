@@ -27,6 +27,7 @@ public class DetailActivity extends Activity {
     String UserID;
     String MarkID;
     String Category;
+    String UserPic;
 
     String star_point;
     String review;
@@ -60,6 +61,7 @@ public class DetailActivity extends Activity {
         UserID = intent.getStringExtra("UserID");
         MarkID = intent.getStringExtra("MarkID");
         Category = intent.getStringExtra("Category");
+        UserPic = intent.getStringExtra("UserPic");
 
         Toast.makeText(this, UserID + " / " + MarkID + " / " + Category, Toast.LENGTH_SHORT).show();
 

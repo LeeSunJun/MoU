@@ -90,7 +90,8 @@ public class LoginActivity extends Activity {
         Toast.makeText(LoginActivity.this,"Guest Mode",Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent();
-        intent.putExtra("result_ID","Guest");
+        intent.putExtra("ID","Guest");
+        intent.putExtra("NAME", "Guest");
         setResult(RESULT_OK,intent);
 
         initialize();
