@@ -99,7 +99,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     Marker DIY; // adding loc
     Marker tmp_marker;
 
-    String nickName;
+    String Name;
+    String ID;
 
     TextView mark_name;
 
@@ -132,9 +133,14 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
 
         if(requestCode == 1) { // get the User ID that login
+            final TextView nameView = (TextView) findViewById(R.id.name);
+            final TextView id = (TextView) findViewById(R.id.id);
 
-            String resultMsg = data.getStringExtra("result_ID");
-            nickName = resultMsg;
+            Name = data.getStringExtra("NAME");
+            ID = data.getStringExtra("ID");
+
+            nameView.setText(Name);
+            id.setText(ID);
 
             mark_info.setVisibility(View.GONE);
             mark_info_open = false;
@@ -766,7 +772,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void setting_clicked(View v){
         Intent intent = new Intent(getBaseContext(), Setting.class);
-        intent.putExtra("EXTRA_SESSION_ID", nickName);
+        intent.putExtra("EXTRA_SESSION_ID", ID);
         startActivityForResult(intent,1);
     }
 

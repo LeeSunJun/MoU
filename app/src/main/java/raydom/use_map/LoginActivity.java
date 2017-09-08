@@ -74,7 +74,8 @@ public class LoginActivity extends Activity {
 
         if(checking) {
             Intent intent = new Intent();
-            intent.putExtra("result_ID",ID.getText().toString());
+            intent.putExtra("ID",myID);
+            intent.putExtra("NAME", myName);
             setResult(RESULT_OK,intent);
 
             initialize();
