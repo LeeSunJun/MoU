@@ -58,14 +58,15 @@
                     android:textColor="#FF000000" />
 
                 <ImageView
+                    android:id="@+id/gpa_star"
                     android:layout_width="match_parent"
                     android:layout_height="16sp"
-                    android:layout_marginLeft="10sp"
                     android:layout_below="@+id/mark_name"
-                    android:src="@drawable/star_icon"
+                    android:layout_marginLeft="10sp"
+                    android:onClick="personal_add_clicked"
                     android:padding="0sp"
                     android:scaleType="fitStart"
-                    android:onClick="personal_add_clicked"/>
+                    android:src="@drawable/star_icon" />
 
             </RelativeLayout>
 

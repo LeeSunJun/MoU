@@ -87,7 +87,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     String gpa_url_send;
     String gpa_url_get;
-    String gpa_num;
 
     ImageView mark_image;
 
@@ -428,17 +427,15 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                     SendData tmp_send = new SendData();
                     tmp_send.sendData4(gpa_url_send,id);
-/*
+
+                    Log.d("gpa","mark id : "+id);
+
                     while(tmp_send.get_check() == -1) {
                         ;
                     }
 
                     getData(gpa_url_get);
 
-                    TextView m_n;
-                    m_n = (TextView)findViewById(R.id.mark_name);
-                    m_n.setText(gpa_num);
-*/
                     //마커 정보 보여주는 listener 구현 부
                     Picasso.with(context)
                             .load(get_url(marker.getPosition().latitude,marker.getPosition().longitude))
@@ -1019,7 +1016,23 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             protected void onPostExecute(String result) {
                 myJSON = result;
 
-                gpa_num = parse_gpa();
+                int gpa_num = Integer.parseInt(parse_gpa());
+
+                ImageView starPoint = (ImageView)findViewById(R.id.gpa_star);
+
+                if(gpa_num < 0.5) {
+                    starPoint.setImageResource(R.drawable.star_0);
+                } else if (gpa_num < 1.5) {
+                    starPoint.setImageResource(R.drawable.star_1);
+                } else if (gpa_num < 2.5) {
+                    starPoint.setImageResource(R.drawable.star_2);
+                } else if (gpa_num < 3.5) {
+                    starPoint.setImageResource(R.drawable.star_3);
+                } else if (gpa_num < 4.5) {
+                    starPoint.setImageResource(R.drawable.star_4);
+                } else {
+                    starPoint.setImageResource(R.drawable.star_5);
+                }
             }
         }
         GetDataJSON g = new GetDataJSON();
@@ -1037,8 +1050,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             for (int i = 0; i < JA.length(); i++) {
 
                 JSONObject c = JA.getJSONObject(i);
-                gpa = c.getString("gpa");
+                Log.d("gpa","All contents : " + c);
+                gpa = c.getString("GPA");
             }
+
+            Log.d("gpa",gpa);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1058,7 +1074,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             for (int i = 0; i < JA.length(); i++) {
 
                 JSONObject c = JA.getJSONObject(i);
-                gpa = c.getString("gpa");
+                gpa = c.getString("reviews");
             }
 
         } catch (JSONException e) {
