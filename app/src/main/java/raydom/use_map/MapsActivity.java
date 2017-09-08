@@ -85,6 +85,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     String myJSON;
 
+    String myName;
+    String myID;
+
+    String userPic;
+
     String gpa_url_send;
     String gpa_url_get;
 
@@ -113,7 +118,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     //String marker_name;
     String current_marker_name;
     EditText text;
-    String userPic;
 
     Geocoder geocoder;
     EditText et;
@@ -431,15 +435,13 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     Log.d("review","id : "+id);
 
                     SendData tmp_send = new SendData();
-                    tmp_send.sendData4(gpa_url_send,id);
+                    String res = tmp_send.sendData4(gpa_url_send,id);
 
-                    Log.d("gpa","mark id : "+id);
-
-                    while(tmp_send.get_check() == -1) {
-                        ;
+                    if(!parse_gpa(res).isEmpty()) {
+                        show_stars(Double.parseDouble(parse_gpa(res)));
                     }
 
-                    getData(gpa_url_get);
+                    Log.d("gpa","mark id : "+id);
 
                     //마커 정보 보여주는 listener 구현 부
                     Picasso.with(context)
@@ -946,6 +948,25 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     }
 
+    void show_stars(double gpa_num) {
+        Log.d("gpa" , "values is " + gpa_num);
+        ImageView starPoint = (ImageView)findViewById(R.id.gpa_star);
+
+        if(gpa_num < 0.5) {
+            starPoint.setImageResource(R.drawable.star_0);
+        } else if (gpa_num < 1.5) {
+            starPoint.setImageResource(R.drawable.star_1);
+        } else if (gpa_num < 2.5) {
+            starPoint.setImageResource(R.drawable.star_2);
+        } else if (gpa_num < 3.5) {
+            starPoint.setImageResource(R.drawable.star_3);
+        } else if (gpa_num < 4.5) {
+            starPoint.setImageResource(R.drawable.star_4);
+        } else {
+            starPoint.setImageResource(R.drawable.star_5);
+        }
+    }
+
     public String get_url(double latitude, double longitude) {
         Cursor c = controller.select_category(category);
 
@@ -1023,26 +1044,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             protected void onPostExecute(String result) {
                 myJSON = result;
 
-                int gpa_num = 0;
-
-                if (parse_gpa().isEmpty())
-                    gpa_num = Integer.parseInt(parse_gpa());
-
-                ImageView starPoint = (ImageView)findViewById(R.id.gpa_star);
-
-                if(gpa_num < 0.5) {
-                    starPoint.setImageResource(R.drawable.star_0);
-                } else if (gpa_num < 1.5) {
-                    starPoint.setImageResource(R.drawable.star_1);
-                } else if (gpa_num < 2.5) {
-                    starPoint.setImageResource(R.drawable.star_2);
-                } else if (gpa_num < 3.5) {
-                    starPoint.setImageResource(R.drawable.star_3);
-                } else if (gpa_num < 4.5) {
-                    starPoint.setImageResource(R.drawable.star_4);
-                } else {
-                    starPoint.setImageResource(R.drawable.star_5);
-                }
             }
         }
         GetDataJSON g = new GetDataJSON();
@@ -1050,12 +1051,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     }
 
-    public String parse_gpa() {
+    public String parse_gpa(String json) {
 
         String gpa = " ";
 
         try {
-            JSONArray JA = new JSONArray(myJSON);
+            JSONArray JA = new JSONArray(json);
 
             for (int i = 0; i < JA.length(); i++) {
 

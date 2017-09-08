@@ -64,9 +64,17 @@ public class SendData {
     }
 
     //send ID,PW data
-    public void sendData1(String url, String id, String pw){
+    public String sendData1(String url, String id, String pw){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String res = " ";
+
+            int rcode = -1;
+
+            public String get_result() {
+                return res;
+            }
 
             @Override
             public Void doInBackground(String... params) {
@@ -113,9 +121,10 @@ public class SendData {
                     }
                     br.close();
 
-                    String res = response.toString();
-
+                    res = response.toString();
                     Log.d("Ray","result 2 : "+res);
+
+                    rcode = retCode;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,6 +133,8 @@ public class SendData {
                 return null;
             }
         }
+
+        HttpUtil util = new HttpUtil();
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -139,11 +150,17 @@ public class SendData {
 
             Log.d("Ray","result 3 : "+json);
 
-            new HttpUtil().execute(url,json);
+            util.execute(url,json);
+
+            while(util.rcode == -1) {
+                ;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return util.get_result();
     }
 
     //send LT,LG data
@@ -347,9 +364,18 @@ public class SendData {
     }
 
     //send LT,LG,CT for getting gpa
-    public void sendData4(String url, int id){
+    public String sendData4(String url, int id){
+
+        String rt;
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String res = " ";
+            int rcode = -1;
+
+            public String get_result() {
+                return res;
+            }
 
             @Override
             public Void doInBackground(String... params) {
@@ -378,6 +404,7 @@ public class SendData {
                     int retCode = conn.getResponseCode();
 
                     check = retCode;
+
                     Log.d("Ray","result1 : "+retCode);
 
                     InputStream is = conn.getInputStream();
@@ -390,9 +417,11 @@ public class SendData {
                     }
                     br.close();
 
-                    String res = response.toString();
+                    res = response.toString();
 
                     Log.d("Ray","result 2 : "+res);
+
+                    rcode = retCode;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -401,6 +430,8 @@ public class SendData {
                 return null;
             }
         }
+
+        HttpUtil util = new HttpUtil();
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -413,11 +444,17 @@ public class SendData {
 
             String json = jsonObject.toString();
 
-            new HttpUtil().execute(url,json);
+            util.execute(url,json);
+
+            while(util.rcode == -1) {
+                ;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return util.get_result();
     }
 
     //send information about users for sign up

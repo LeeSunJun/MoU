@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.opencsv.CSVReader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,6 +31,9 @@ public class LoginActivity extends Activity {
 
     EditText ID;
     EditText PW;
+
+    String myName;
+    String myID;
 
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -100,7 +108,7 @@ public class LoginActivity extends Activity {
     *login_Clicked 에서 호출
      */
     public boolean check_id_pw() {         //ID,PW 검사
-        send_login.sendData1("http://52.79.121.208/login.php", ID.getText().toString(), PW.getText().toString());
+        parse_id_name(send_login.sendData1("http://52.79.121.208/login.php", ID.getText().toString(), PW.getText().toString()));
 
         while(send_login.get_check() == -1) {
             ;
@@ -139,6 +147,25 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void parse_id_name(String json) {
+
+        try {
+            JSONArray JA = new JSONArray(json);
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                Log.d("gpa","All contents : " + c);
+                myID = c.getString("id");
+                myName = c.getString("name");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
         }
     }
 
