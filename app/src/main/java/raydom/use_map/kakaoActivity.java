@@ -80,9 +80,17 @@ public class kakaoActivity extends Activity{
                 public void onSuccess(UserProfile userProfile) {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.toString());
+                    Log.d("UserProfile", userProfile.toString());
                     String s = userProfile.toString();
-                    Toast.makeText(kakaoActivity.this, s, Toast.LENGTH_SHORT).show();
+                    String[] div = s.split(",");
+                    String url = div[2];
+                    url = url.substring(18);
+                    url = url.replaceAll("'","");
+
+                    Log.d("UserProfile", "url is " + url);
+                    Intent intent = new Intent();
+                    intent.putExtra("profilePic", url);
+                    setResult(RESULT_OK,intent);
                     finish();
                 }
             });

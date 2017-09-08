@@ -56,7 +56,7 @@
         <activity android:name=".ParsingActivity"/>
         <activity android:name=".ADD_Marker"/>
         <activity android:name=".Setting"/>
-        <activity android:name=".AuthActivity"/>
+        <activity android:name=".kakaoActivity"/>
         <activity android:name=".DetailActivity"/>
 
     </application>

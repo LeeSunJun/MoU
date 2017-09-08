@@ -54,9 +54,10 @@ public class Setting extends Activity {
 
     public void logout_clicked(View view){
 
-        AuthActivity authActivity = new AuthActivity();
-        //authActivity.kakaoLogout();
-        authActivity.GoogleSignOut();
+        /*AuthActivity authActivity = new AuthActivity();
+        authActivity.kakaoLogout();;*/
+        kakaoActivity kakao = new kakaoActivity();
+        kakao.kakaoLogout();
 
         startActivityForResult(new Intent(this,LoginActivity.class),1);
         initialize();

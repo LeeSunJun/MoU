@@ -113,6 +113,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     //String marker_name;
     String current_marker_name;
     EditText text;
+    String userPic;
 
     Geocoder geocoder;
     EditText et;
@@ -147,6 +148,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             controller.insert(id,lt, lg, title, url, bm, ct);
 
             Toast.makeText(this, "Marker Adding is success", Toast.LENGTH_SHORT).show();
+        } else if( requestCode == 7){
+            userPic = data.getStringExtra("profilePic");
+            Log.d("UserProfile", "maps url is " + userPic);
         }
     }
 
@@ -634,8 +638,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             drawer.setVisibility(View.GONE);
 
         if(Session.getCurrentSession().isClosed()){
-            Intent intent = new Intent(getBaseContext(), AuthActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(getBaseContext(), kakaoActivity.class);
+            startActivityForResult(intent, 7);
+            //startActivity(intent);
         }else {
 
             Toast.makeText(this,"Click screen you want to add",Toast.LENGTH_SHORT).show();
