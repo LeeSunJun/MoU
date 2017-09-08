@@ -110,6 +110,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     ToggleButton mGeo;
 
     int category = 0;
+    int markid;
 
     private float mDeclination; // get sensor's declination value
     private float[] mRotationMatrix = new float[9]; // get rotation value
@@ -436,18 +437,18 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     startManagingCursor(c);
 
                     c.moveToNext();
-                    int id = c.getInt(c.getColumnIndex("id"));
+                    markid = c.getInt(c.getColumnIndex("id"));
 
-                    Log.d("review","id : "+id);
+                    Log.d("review","id : "+markid);
 
                     SendData tmp_send = new SendData();
-                    String res = tmp_send.sendData4(gpa_url_send,id);
+                    String res = tmp_send.sendData4(gpa_url_send,markid);
 
                     if(!parse_gpa(res).isEmpty()) {
                         show_stars(Double.parseDouble(parse_gpa(res)));
                     }
 
-                    Log.d("gpa","mark id : "+id);
+                    Log.d("gpa","mark id : "+markid);
 
                     //마커 정보 보여주는 listener 구현 부
                     Picasso.with(context)
@@ -898,7 +899,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("Url",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
-
+        intent.putExtra("UserID", ID);
+        intent.putExtra("MarkID", markid);
+        intent.putExtra("Category", category);
         Log.d("Url_send",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
 
         startActivity(intent);

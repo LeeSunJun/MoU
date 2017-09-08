@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,7 +24,10 @@ public class DetailActivity extends Activity {
 
     Context context = this;
 
-    String user_id;
+    String UserID;
+    String MarkID;
+    String Category;
+
     String star_point;
     String review;
 
@@ -53,6 +57,11 @@ public class DetailActivity extends Activity {
 
         Intent intent = getIntent();
         String url = intent.getStringExtra("Url");
+        UserID = intent.getStringExtra("UserID");
+        MarkID = intent.getStringExtra("MarkID");
+        Category = intent.getStringExtra("Category");
+
+        Toast.makeText(this, UserID + " / " + MarkID + " / " + Category, Toast.LENGTH_SHORT).show();
 
         setResult(RESULT_OK,intent);
 
