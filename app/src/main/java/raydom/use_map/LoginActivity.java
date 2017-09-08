@@ -152,6 +152,8 @@ public class LoginActivity extends Activity {
 
     public void parse_id_name(String json) {
 
+        Log.d("gpa","contents : " + 123);
+
         try {
             JSONArray JA = new JSONArray(json);
 

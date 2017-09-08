@@ -26,8 +26,6 @@ public class SendData {
     String LT_TAG = "longitude"; //longitude
     String LG_TAG = "latitude"; //latitude
 
-    String ID_TAG = "keyid";
-
     String uID_TAG = "ID"; //id
     String uPW_TAG = "PW"; //pw
 
@@ -46,6 +44,11 @@ public class SendData {
     String sign_birth_TAG = "birthDay";
     String sign_gender_TAG = "sex";
     String sign_phone_TAG = "PhoneNumber";
+
+    String user_ID_TAG = "user_ID";
+    String mark_ID_TAG = "markID";
+    String gpa_TAG = "gpa";
+    String review_TAG = "review";
 
     int check = -1;
 
@@ -160,7 +163,9 @@ public class SendData {
             e.printStackTrace();
         }
 
-        return util.get_result();
+        String result = "["+util.get_result()+"]";
+
+        return result;
     }
 
     //send LT,LG data
@@ -437,7 +442,7 @@ public class SendData {
             JSONObject jsonObject = new JSONObject();
 
             try {
-                jsonObject.put(ID_TAG, id);
+                jsonObject.put(mark_ID_TAG, id);
             }catch (JSONException e){
 
             }
@@ -541,5 +546,107 @@ public class SendData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //send review
+    public String sendData6(String url, String markID, String userID, String gpa, String review) {
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String res = " ";
+
+            int rcode = -1;
+
+            public String get_result() {
+                return res;
+            }
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    Log.d("Ray","result4 : " + params[1]);
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+
+                    Log.d("Ray","result5 : " + outputInBytes);
+
+                    OutputStream os = conn.getOutputStream();
+
+                    os.write(outputInBytes);
+                    os.flush();
+                    os.close();
+
+                    int retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    res = response.toString();
+                    Log.d("Ray","result 2 : "+res);
+
+                    rcode = retCode;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        HttpUtil util = new HttpUtil();
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(user_ID_TAG, userID);
+                jsonObject.put(mark_ID_TAG, markID);
+                jsonObject.put(gpa_TAG, gpa);
+                jsonObject.put(review_TAG,review);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            Log.d("Ray","result 3 : "+json);
+
+            util.execute(url,json);
+
+            while(util.rcode == -1) {
+                ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return util.get_result();
     }
 }

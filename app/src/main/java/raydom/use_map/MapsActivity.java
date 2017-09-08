@@ -1085,6 +1085,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             for (int i = 0; i < JA.length(); i++) {
 
                 JSONObject c = JA.getJSONObject(i);
+
                 gpa = c.getString("reviews");
             }
 
