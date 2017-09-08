@@ -54,6 +54,7 @@ public class DetailActivity extends Activity {
         star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
 
         ImageView main_image = (ImageView)findViewById(R.id.main_image);
+        ImageView profile = (ImageView)findViewById(R.id.user_icon) ;
 
         Intent intent = getIntent();
         String url = intent.getStringExtra("Url");
@@ -71,6 +72,11 @@ public class DetailActivity extends Activity {
         Picasso.with(context)
                 .load(url)
                 .into(main_image);
+
+        Picasso.with(context)
+                .load(UserPic)
+                .transform(new CropCircleTransformation())
+                .into(profile);
 
         TextView name = (TextView)findViewById(R.id.text_userID);
         name.setText(UserID);
@@ -180,12 +186,16 @@ public class DetailActivity extends Activity {
 
         Log.d("cm",review);
 
-        SendData sendReview = new SendData();
+        if(MarkID.equals("Guest")) {
+            SendData sendReview = new SendData();
 
-        if(!get_url(Integer.parseInt(Category)).isEmpty())
-            sendReview.sendData6(get_url(Integer.parseInt(Category)),MarkID,UserID,star_point,review);
+            if (!get_url(Integer.parseInt(Category)).isEmpty())
+                sendReview.sendData6(get_url(Integer.parseInt(Category)), MarkID, UserID, star_point, review);
 
-        this.finish();
+            this.finish();
+        } else {
+            Toast.makeText(this, "You have Login for Reviewing", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public String get_url(int category) {
