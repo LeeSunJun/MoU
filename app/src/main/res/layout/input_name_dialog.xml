@@ -38,7 +38,7 @@
         android:layout_marginLeft="40sp"
         android:layout_marginRight="25sp"
         android:textSize = "20sp"
+        android:ems="10"
         android:hint="Write Here"
-        android:background="@null"/>
-
+        />
 </LinearLayout>

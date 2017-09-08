@@ -1,6 +1,7 @@
 package raydom.use_map;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -110,7 +111,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private SensorManager sensorManager; //to manage sensor
     private Sensor sensor; // sensor
     float bearing;
-    String marker_name;
+    //String marker_name;
+    String current_marker_name;
     EditText text;
 
     Geocoder geocoder;
@@ -712,28 +714,30 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     private void getMarkerName(){
-        LayoutInflater li = LayoutInflater.from(context);
-        View v = li.inflate(R.layout.input_name_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setView(v);
+        LayoutInflater li = LayoutInflater.from(context); //make layoutInflater
+        View v = li.inflate(R.layout.input_name_dialog, null); // set inflater to input_name_dialog
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context); // make alert dialog
+        alertDialogBuilder.setView(v); // set dialog view to input_name_dialog
 
-        alertDialogBuilder
+        text = (EditText) v.findViewById(R.id.editTextDialogUserInput); // get id from input_name_dialog
+
+
+       alertDialogBuilder
                 .setCancelable(false)
                 .setPositiveButton("OK",
-                new DialogInterface.OnClickListener(){
+                new DialogInterface.OnClickListener(){ // ok clicked
                     public void onClick(DialogInterface dialog, int num){
-                        text = (EditText) findViewById(R.id.editTextDialogUserInput);
-                        //marker_name  = text.getText().toString(); // store input to narkername variance
-                        Toast.makeText(getApplicationContext(), "name is "+marker_name, Toast.LENGTH_SHORT).show();
+                        current_marker_name  = text.getText().toString(); // store input to narkername variance
+                        Toast.makeText(getApplicationContext(), "name is "+current_marker_name, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener(){
+                        new DialogInterface.OnClickListener(){ //cancle clicked
                             public void onClick(DialogInterface dialog, int num){
-                                dialog.cancel();
+                                dialog.cancel(); //cancle dialog
                             }
                         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        AlertDialog alertDialog = alertDialogBuilder.create(); //create dialog
         alertDialog.show();
     }
 
@@ -811,8 +815,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         } else {
             tmp_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         }
-
-        c.close();
     }
 
     public void searching_clicked(View v){
@@ -938,6 +940,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             }
         }
 
+        c.close();
     }
 
     public String get_url(double latitude, double longitude) {
@@ -956,8 +959,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 return url;
             }
         }
-
-        c.close();
 
         return "http://i.imgur.com/NmPyWw4.png";
     }
@@ -978,8 +979,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 return name;
             }
         }
-
-        c.close();
 
         return "No Name";
     }
