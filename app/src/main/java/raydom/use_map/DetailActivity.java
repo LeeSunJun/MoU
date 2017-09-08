@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -30,8 +31,6 @@ public class DetailActivity extends Activity {
 
     String star_point;
     String review;
-
-    EditText cm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -71,7 +70,8 @@ public class DetailActivity extends Activity {
                 .load(url)
                 .into(main_image);
 
-        cm = (EditText)findViewById(R.id.comment);
+        TextView name = (TextView)findViewById(R.id.text_userID);
+        name.setText(UserID);
 
         //initialize();
     }
@@ -173,7 +173,10 @@ public class DetailActivity extends Activity {
     }
 
     public void review_submit_clicked(View v) {
-        review = cm.toString();
+        EditText cm = (EditText)findViewById(R.id.comment);
+        review = cm.getText().toString();
+
+        Log.d("cm",review);
 
         SendData sendReview = new SendData();
 
