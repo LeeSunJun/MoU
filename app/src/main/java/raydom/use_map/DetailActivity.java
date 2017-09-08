@@ -177,6 +177,9 @@ public class DetailActivity extends Activity {
 
         SendData sendReview = new SendData();
 
+        if(!get_url(Integer.parseInt(Category)).isEmpty())
+            sendReview.sendData6(get_url(Integer.parseInt(Category)),MarkID,UserID,star_point,review);
+
         this.finish();
     }
 

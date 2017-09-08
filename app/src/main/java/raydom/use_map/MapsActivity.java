@@ -897,8 +897,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("Url",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
         intent.putExtra("UserID", ID);
-        intent.putExtra("MarkID", markid);
-        intent.putExtra("Category", category);
+        intent.putExtra("MarkID", Integer.toString(markid));
+        intent.putExtra("Category", Integer.toString(category));
         Log.d("Url_send",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
 
         startActivity(intent);
