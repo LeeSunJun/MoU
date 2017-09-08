@@ -1,7 +1,6 @@
 package raydom.use_map;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -574,8 +573,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         if(drawer.getVisibility() == View.VISIBLE)
             drawer.setVisibility(View.GONE);
 
-        gpa_url_send = "http://52.79.121.208/review/Psmoke_review_mark.php";
-        gpa_url_get = "http://52.79.121.208/review/smoke_review_send.php";
+        gpa_url_send = "http://52.79.121.208/review/smoke/Psmoke_review_mark.php";
+        gpa_url_get = "http://52.79.121.208/review/smoke/smoke_review_send.php";
     }
 
     public void SOG_b_clicked(View v){
@@ -940,7 +939,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             }
         }
 
-        c.close();
     }
 
     public String get_url(double latitude, double longitude) {
@@ -1020,7 +1018,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             protected void onPostExecute(String result) {
                 myJSON = result;
 
-                int gpa_num = Integer.parseInt(parse_gpa());
+                int gpa_num = 0;
+
+                if (parse_gpa().isEmpty())
+                    gpa_num = Integer.parseInt(parse_gpa());
 
                 ImageView starPoint = (ImageView)findViewById(R.id.gpa_star);
 
