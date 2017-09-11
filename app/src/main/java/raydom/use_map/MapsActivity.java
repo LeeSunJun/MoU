@@ -436,6 +436,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     add_type = -1;
 
                     mMap.clear();
+
+                    here = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.here_1)).position(new LatLng(LT,LG)).title("Title").zIndex(10.0f));
                     show_mark(category);
 
                     return false;
