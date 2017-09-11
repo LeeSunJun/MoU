@@ -63,7 +63,6 @@
                     android:layout_height="16sp"
                     android:layout_below="@+id/mark_name"
                     android:layout_marginLeft="10sp"
-                    android:onClick="personal_add_clicked"
                     android:padding="0sp"
                     android:scaleType="fitStart"
                     android:src="@drawable/star_icon" />

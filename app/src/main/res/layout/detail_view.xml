@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="14"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textColor="#FF000000"
             android:text="My reviews" />
 
@@ -93,7 +93,7 @@
 
             <TextView
                 android:id="@+id/text_userID"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="NAME"/>
@@ -203,7 +203,7 @@
             android:layout_weight="14"
             android:text="All reviews"
             android:textColor="#FF000000"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
 
         <View
             android:layout_width="0dp"
@@ -237,6 +237,7 @@
     </LinearLayout>
 
     <ScrollView
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6">
@@ -263,15 +264,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_1"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_1"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_1"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -279,6 +285,66 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="14">
+
+                    <TextView
+                        android:id="@+id/name_2"
+                        android:textSize="25sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
+
+                    <ImageView
+                        android:id="@+id/star_point_2"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
+
+                    <TextView
+                        android:id="@+id/review_2"
+                        android:textSize="16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
 
                 </LinearLayout>
 
@@ -301,15 +367,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_3"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_3"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_3"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -318,9 +389,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -338,15 +418,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_4"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_4"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_4"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -355,9 +440,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -375,15 +469,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_5"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_5"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_5"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -392,9 +491,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -412,15 +520,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_6"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_6"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_6"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -429,9 +542,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -449,15 +571,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_7"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_7"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_7"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -466,9 +593,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -486,15 +622,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_8"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_8"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_8"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -503,9 +644,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -523,15 +673,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_9"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_9"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_9"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -540,9 +695,18 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
+
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -560,15 +724,20 @@
                     android:layout_weight="14">
 
                     <TextView
+                        android:id="@+id/name_10"
+                        android:textSize="25sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/star_point_10"
+                        android:layout_width="120sp"
+                        android:layout_height="30sp" />
 
                     <TextView
+                        android:id="@+id/review_10"
+                        android:textSize="16sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -577,79 +746,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"/>
 
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="14">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
                     <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="14">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="10sp"
+                        android:layout_marginRight="10sp"
+                        android:background="#FFB6B6B6"/>
 
                 </LinearLayout>
 

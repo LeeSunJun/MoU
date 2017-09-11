@@ -649,4 +649,103 @@ public class SendData {
 
         return util.get_result();
     }
+
+    //send markID for getting reviews
+    public String sendData7(String url, String markID) {
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String res = " ";
+
+            int rcode = -1;
+
+            public String get_result() {
+                return res;
+            }
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    Log.d("Ray","result4 : " + params[1]);
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+
+                    Log.d("Ray","result5 : " + outputInBytes);
+
+                    OutputStream os = conn.getOutputStream();
+
+                    os.write(outputInBytes);
+                    os.flush();
+                    os.close();
+
+                    int retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    res = response.toString();
+                    Log.d("Ray","result 2 : "+res);
+
+                    rcode = retCode;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        HttpUtil util = new HttpUtil();
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(mark_ID_TAG, markID);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            Log.d("Ray","result 3 : "+json);
+
+            util.execute(url,json);
+
+            while(util.rcode == -1) {
+                ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return util.get_result();
+    }
 }

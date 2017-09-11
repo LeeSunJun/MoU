@@ -88,6 +88,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     String userPic;
 
     String gpa_url_send;
+    String review_url;
 
     ImageView mark_image;
 
@@ -602,6 +603,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             drawer.setVisibility(View.GONE);
 
         gpa_url_send = "http://52.79.121.208/review/smoke/smoke_review_mark.php";
+        review_url = "http://52.79.121.208/review/smoke/smoke_review_read.php";
+
     }
 
     public void SOG_b_clicked(View v){
@@ -919,6 +922,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         SendData tmp_send = new SendData();
 
         Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("Reviews",tmp_send.sendData7(review_url,Integer.toString(markid)));
+
         intent.putExtra("Url",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
         intent.putExtra("UserID", ID);
         intent.putExtra("MarkID", Integer.toString(markid));
@@ -1092,33 +1097,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             for (int i = 0; i < JA.length(); i++) {
 
                 JSONObject c = JA.getJSONObject(i);
-                Log.d("gpa","All contents : " + c);
+                Log.d("gpa", "All contents : " + c);
                 gpa = c.getString("GPA");
             }
 
-            Log.d("gpa",gpa);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.d("JUN", e.toString());
-        }
-
-        return gpa;
-    }
-
-    public String parse_reviews() {
-
-        String gpa = " ";
-
-        try {
-            JSONArray JA = new JSONArray(myJSON);
-
-            for (int i = 0; i < JA.length(); i++) {
-
-                JSONObject c = JA.getJSONObject(i);
-
-                gpa = c.getString("reviews");
-            }
+            Log.d("gpa", gpa);
 
         } catch (JSONException e) {
             e.printStackTrace();
