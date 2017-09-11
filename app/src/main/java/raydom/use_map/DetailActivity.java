@@ -194,7 +194,7 @@ public class DetailActivity extends Activity {
 
             this.finish();
         } else {
-            Toast.makeText(this, "You have Login for Reviewing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You have to Login for Reviewing", Toast.LENGTH_SHORT).show();
         }
     }
 

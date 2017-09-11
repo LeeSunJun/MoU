@@ -107,6 +107,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     int category = 0;
     int markid;
+    int add_type = -1;
 
     private float mDeclination; // get sensor's declination value
     private float[] mRotationMatrix = new float[9]; // get rotation value
@@ -425,14 +426,23 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 17.0f));
 
+                tmp_marker = marker;
+
                 if(marker.getPosition().latitude == here.getPosition().latitude && marker.getPosition().longitude == here.getPosition().longitude) {
+                    return false;
+
+                } else if(add_type == 1) {
+                    personal_add_clicked();
+                    add_type = -1;
+
+                    mMap.clear();
+                    show_mark(category);
+
                     return false;
 
                 } else {
                     mark_info.setVisibility(View.VISIBLE);
                     mark_info_open = true;
-
-                    tmp_marker = marker;
 
                     Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
                     startManagingCursor(c);
@@ -670,7 +680,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
     }
      public void bm_add_clicked(View v) {
-       addMarkerDialog();
+         add_type = 1;
+         addMarkerDialog();
     }
 
     private void addMarkerDialog(){ // Select my position marker or exist market
@@ -814,7 +825,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         view_visible();
     }
 
-    public void personal_add_clicked(View v) {
+    public void personal_add_clicked() {
 
         Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
         startManagingCursor(c);
@@ -902,6 +913,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void detail_clicked(View v){
+
+        SendData tmp_send = new SendData();
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("Url",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
