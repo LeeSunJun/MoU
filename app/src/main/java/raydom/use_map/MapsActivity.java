@@ -801,7 +801,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void add_ok_clicked(View v){
 
-        send_mark.sendData2("http://13.124.54.46/login3.php",Double.toString(DIY_LT),Double.toString(DIY_LG));
+        //send_mark.sendData2("http://13.124.54.46/login3.php",Double.toString(DIY_LT),Double.toString(DIY_LG));
 
         show_mark(category);
 

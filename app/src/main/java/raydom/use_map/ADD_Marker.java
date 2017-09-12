@@ -285,19 +285,19 @@ public class ADD_Marker extends Activity {
         }
 
         if(t_category == 1) {
-            String url = "http://13.124.175.100/image/toilet_upload.php";
+            String url = "http://52.79.121.208/diy/toilet_upload.php";
             sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
         } else if(t_category == 2) {
-            String url = "http://13.124.175.100/image/wifi_upload.php";
+            String url = "http://52.79.121.208/diy/wifi_upload.php";
             sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), m_agency.getText().toString(), image_str);
         } else if(t_category == 3) {
-            String url = "http://13.124.175.100/image/smoke_upload.php";
+            String url = "http://52.79.121.208/diy/smoke_upload.php";
             sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
         } else if(t_category == 4) {
-            String url = "http://13.124.175.100/image/landmark_upload.php";
+            String url = "http://52.79.121.208/diy/landmark_upload.php";
             sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp.getText().toString(), "", image_str);
         } else if(t_category == 9) {
-            String url = "http://13.124.175.100/image/trash_upload.php";
+            String url = "http://52.79.121.208/diy/trash_upload.php";
             sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp2.getText().toString(), "", image_str);
         }
 
