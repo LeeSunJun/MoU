@@ -48,7 +48,37 @@ public class DBHandler {
         Log.d("insert","id : "+id);
     }
 
-    //select
+    public void insert_personal(double lt, double lg, String name) {
+        db = helper.getWritableDatabase(); // db 객체를 얻어온다. 쓰기 가능
+
+        ContentValues values = new ContentValues();
+
+        values.put("latitude", lt);
+        values.put("longitude", lg);
+        values.put("name", name);
+
+        db.insert("personal", null, values);
+
+        Log.d("insert","name : "+ name);
+    }
+
+    public void insert_diy(double lt, double lg, String name, String url, int category) {
+        db = helper.getWritableDatabase(); // db 객체를 얻어온다. 쓰기 가능
+
+        ContentValues values = new ContentValues();
+
+        values.put("latitude", lt);
+        values.put("longitude", lg);
+        values.put("name", name);
+        values.put("url", url);
+        values.put("category", category);
+
+        db.insert("DiyMarker", null, values);
+
+        Log.d("insert","name : " + name);
+    }
+
+    //select all
     public Cursor select_all() {
 
         db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
@@ -57,6 +87,28 @@ public class DBHandler {
         return c;
     }
 
+    public Cursor select_all_personal() {
+
+        db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
+
+        Log.d("insert", "personal in11");
+
+        Cursor c = db.query("personal", null, null, null, null, null, null);
+
+        Log.d("insert", "personal in");
+
+        return c;
+    }
+
+    public Cursor select_all_diy() {
+
+        db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
+        Cursor c = db.query("DiyMarker", null, null, null, null, null, null);
+
+        return c;
+    }
+
+    //select specific
     public Cursor select_marker(double lt , double lg) {
         db = helper.getReadableDatabase();
         Cursor c = db.rawQuery("select * from Marker where latitude ="+ lt +" and longitude+"+ lg , null);
@@ -72,6 +124,21 @@ public class DBHandler {
             c = db.rawQuery("select * from Marker where bm = 1", null);
         } else {
             c = db.rawQuery("select * from Marker where category=" + category, null);
+        }
+
+        Log.d("ddbb","int sc");
+
+        return c;
+    }
+
+    public Cursor select_category_diy(int category) {
+        db = helper.getReadableDatabase();
+        Cursor c;
+
+        if(category == 5) {
+            c = db.rawQuery("select * from DiyMarker where bm = 1", null);
+        } else {
+            c = db.rawQuery("select * from DiyMarker where category=" + category, null);
         }
 
         Log.d("ddbb","int sc");

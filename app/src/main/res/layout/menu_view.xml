@@ -134,7 +134,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <Button
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
@@ -188,7 +188,7 @@
 
                     </LinearLayout>
 
-                    <Button
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
@@ -222,7 +222,7 @@
 
                     </LinearLayout>
 
-                    <Button
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
@@ -230,8 +230,7 @@
                         android:textSize="30sp"
                         android:textColor="#FF000000"
                         android:textAlignment="viewStart"
-                        android:text="Bookmarks"
-                        android:onClick="Bookmark_b_clicked"/>
+                        android:text="Bookmarks" />
 
                     <View
                         android:layout_width="match_parent"

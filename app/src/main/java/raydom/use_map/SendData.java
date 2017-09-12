@@ -748,4 +748,80 @@ public class SendData {
 
         return util.get_result();
     }
+
+    //send LT,LG ,name for personal marker
+    public void sendData8(String url, String latitude, String longitude, String name){
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+                    OutputStream os = conn.getOutputStream();
+                    os.write( outputInBytes );
+                    os.close();
+
+                    int retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    String res = response.toString();
+
+                    Log.d("Ray","result 2 : "+res);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(LT_TAG, latitude);
+                jsonObject.put(LG_TAG, longitude);
+                jsonObject.put(mark_name_TAG, name);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            new HttpUtil().execute(url,json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

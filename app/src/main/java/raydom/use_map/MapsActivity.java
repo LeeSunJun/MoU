@@ -433,7 +433,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     return false;
 
                 } else if(add_type == 1) {
-                    personal_add_clicked();
+                    personal_add();
                     add_type = -1;
 
                     mMap.clear();
@@ -764,6 +764,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     public void onClick(DialogInterface dialog, int num){
                         current_marker_name  = text.getText().toString(); // store input to narkername variance
                         Toast.makeText(getApplicationContext(), "name is "+current_marker_name, Toast.LENGTH_SHORT).show();
+
+                        controller.insert_personal(here.getPosition().latitude,here.getPosition().longitude,current_marker_name);
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -795,13 +797,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void setting_clicked(View v){
         Intent intent = new Intent(getBaseContext(), Setting.class);
-        intent.putExtra("EXTRA_SESSION_ID", ID);
         startActivityForResult(intent,1);
     }
 
     public void add_ok_clicked(View v){
-
-        //send_mark.sendData2("http://13.124.54.46/login3.php",Double.toString(DIY_LT),Double.toString(DIY_LG));
 
         show_mark(category);
 
@@ -830,7 +829,31 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         view_visible();
     }
 
-    public void personal_add_clicked() {
+    public void personal_b_clicked(View v) {
+        mMap.clear();
+
+        Cursor c = controller.select_all_personal();
+        startManagingCursor(c);
+
+        Log.d("ddbb", "get Cursor");
+
+        while (c.moveToNext()) {
+            // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+            double lt = c.getDouble(c.getColumnIndex("latitude"));
+            double lg = c.getDouble(c.getColumnIndex("longitude"));
+            String name = c.getString(c.getColumnIndex("name"));
+
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                    .position(new LatLng(lt, lg)).title(name).zIndex(1.0f));
+        }
+
+        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
+
+        if(drawer.getVisibility() == View.VISIBLE)
+            drawer.setVisibility(View.GONE);
+    }
+
+    public void personal_add() {
 
         Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
         startManagingCursor(c);
@@ -945,39 +968,61 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void show_mark(int category) {
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(126.928117, 37.483867)).title("").zIndex(1.0f));
+        if(category == 5) {
+            Cursor c = controller.select_category(category);
+            startManagingCursor(c);
 
-        Log.d("ddbb", "in show");
-        Cursor c = controller.select_category(category);
-        startManagingCursor(c);
+            Log.d("ddbb", "get Cursor");
 
-        Log.d("ddbb", "get Cursor");
+            while (c.moveToNext()) {
+                // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+                double lt = c.getDouble(c.getColumnIndex("latitude"));
+                double lg = c.getDouble(c.getColumnIndex("longitude"));
+                String name = c.getString(c.getColumnIndex("name"));
+                int bm = c.getInt(c.getColumnIndex("bm"));
 
-        while (c.moveToNext()) {
-            // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
-            int id = c.getInt(c.getColumnIndex("id"));
-            double lt = c.getDouble(c.getColumnIndex("latitude"));
-            double lg = c.getDouble(c.getColumnIndex("longitude"));
-            String name = c.getString(c.getColumnIndex("name"));
-            String url = c.getString(c.getColumnIndex("url"));
-            int bm = c.getInt(c.getColumnIndex("bm"));
-
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lt, lg)).title("").zIndex(1.0f));
-
-            if(id < 0) {
                 if (bm == 1) {
                     mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                            .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
-                } else {
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                             .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
                 }
-            } else {
-                if (bm == 1) {
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                            .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+            }
+
+        } else if(category == 6) {
+
+        } else {
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(126.928117, 37.483867)).title("").zIndex(1.0f));
+
+            Log.d("ddbb", "in show");
+            Cursor c = controller.select_category(category);
+            startManagingCursor(c);
+
+            Log.d("ddbb", "get Cursor");
+
+            while (c.moveToNext()) {
+                // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+                int id = c.getInt(c.getColumnIndex("id"));
+                double lt = c.getDouble(c.getColumnIndex("latitude"));
+                double lg = c.getDouble(c.getColumnIndex("longitude"));
+                String name = c.getString(c.getColumnIndex("name"));
+                String url = c.getString(c.getColumnIndex("url"));
+                int bm = c.getInt(c.getColumnIndex("bm"));
+
+                if (id < 0) {
+                    if (bm == 1) {
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                                .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+                    } else {
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+                    }
                 } else {
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+                    if (bm == 1) {
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                                .position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+                    } else {
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(lt, lg)).title("").zIndex(1.0f));
+                    }
                 }
             }
         }

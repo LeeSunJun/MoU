@@ -39,8 +39,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             sql = "create table personal (" +
                     "longitude real, " +
                     "latitude real, " +
+                    "name text);";
+
+            db.execSQL(sql);
+
+            sql = "create table DiyMarker (" +
+                    "longitude real, " +
+                    "latitude real, " +
                     "name text, " +
-                    "bm integer, " +
+                    "url text, " +
                     "category integer);";
 
             db.execSQL(sql);
