@@ -797,6 +797,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void setting_clicked(View v){
         Intent intent = new Intent(getBaseContext(), Setting.class);
+        intent.putExtra("userID",ID);
         startActivityForResult(intent,1);
     }
 

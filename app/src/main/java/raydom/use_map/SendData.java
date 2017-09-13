@@ -50,6 +50,9 @@ public class SendData {
     String gpa_TAG = "GPA";
     String review_TAG = "review";
 
+    String userID_TAG = "userID";
+    String MarkerName_TAG = "MarkerName";
+
     int check = -1;
 
     void reset_checking() {
@@ -750,7 +753,7 @@ public class SendData {
     }
 
     //send LT,LG ,name for personal marker
-    public void sendData8(String url, String latitude, String longitude, String name){
+    public void sendData8(String url, String latitude, String longitude, String name, String userID){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
 
@@ -809,14 +812,17 @@ public class SendData {
             JSONObject jsonObject = new JSONObject();
 
             try {
+                jsonObject.put(userID_TAG, userID);
                 jsonObject.put(LT_TAG, latitude);
                 jsonObject.put(LG_TAG, longitude);
-                jsonObject.put(mark_name_TAG, name);
+                jsonObject.put(MarkerName_TAG, name);
             }catch (JSONException e){
 
             }
 
             String json = jsonObject.toString();
+
+            Log.d("Ray","upload : " + json);
 
             new HttpUtil().execute(url,json);
 

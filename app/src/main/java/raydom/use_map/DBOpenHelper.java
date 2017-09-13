@@ -26,7 +26,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             // TODO Auto-generated method stub
             // SQLiteOpenHelper 가 최초 실행 되었을 때
             String sql = "create table Marker (" +
-                    "id integer primary key, " +
+                    "id integer, " +
                     "longitude real, " +
                     "latitude real, " +
                     "name text, " +
@@ -44,11 +44,20 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             db.execSQL(sql);
 
             sql = "create table DiyMarker (" +
+                    "id integer, " +
                     "longitude real, " +
                     "latitude real, " +
                     "name text, " +
                     "url text, " +
+                    "valid integer" +
                     "category integer);";
+
+            db.execSQL(sql);
+
+            sql = "create table Login (" +
+                    "id text, " +
+                    "name text, " +
+                    "profile text);";
 
             db.execSQL(sql);
         }

@@ -72,6 +72,7 @@ public class DBHandler {
         values.put("name", name);
         values.put("url", url);
         values.put("category", category);
+        values.put("valid", 1);
 
         db.insert("DiyMarker", null, values);
 
@@ -135,11 +136,7 @@ public class DBHandler {
         db = helper.getReadableDatabase();
         Cursor c;
 
-        if(category == 5) {
-            c = db.rawQuery("select * from DiyMarker where bm = 1", null);
-        } else {
-            c = db.rawQuery("select * from DiyMarker where category=" + category, null);
-        }
+        c = db.rawQuery("select * from DiyMarker where category=" + category, null);
 
         Log.d("ddbb","int sc");
 
@@ -159,10 +156,24 @@ public class DBHandler {
         Log.d("ddbb", "1023");
     }
 
+    public void set_valid (int id, int category, int valid) {
+        db = helper.getWritableDatabase(); //db 객체를 얻어온다. 쓰기가능
+
+        db.execSQL("Update DiyMarker set valid = " + valid + " where id=" + id + " and category=" + category);
+
+        Log.d("ddbb", "valid setting");
+    }
+
     //delete
     public void delete (double id) {
         db = helper.getWritableDatabase();
         db.delete("Marker", "id=?", new String[]{String.valueOf(id)});
+        Log.i("ddbb","정상적으로 삭제 되었습니다.");
+    }
+
+    public void delete_login () {
+        db = helper.getWritableDatabase();
+        db.delete("Login",null,null);
         Log.i("ddbb","정상적으로 삭제 되었습니다.");
     }
 }

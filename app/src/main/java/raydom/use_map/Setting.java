@@ -6,11 +6,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -21,15 +21,14 @@ public class Setting extends Activity {
 
     int phase = 1;
 
-    int category = -1 ;
-
     RelativeLayout tR;
 
     DBHandler controller;
 
     SendData send_personal;
 
-    String url = "";
+    String url = "http://52.79.121.208/favorite/private_write.php";
+    String userID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,6 +41,11 @@ public class Setting extends Activity {
         tR = (RelativeLayout)findViewById(R.id.help_lay);
 
         controller = new DBHandler(getApplicationContext());
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
+
+        Log.d("personal upload",userID);
 
         send_personal = new SendData();
 
@@ -67,18 +71,19 @@ public class Setting extends Activity {
 
         Cursor c;
 
-        if(category != -1) {
-            c = controller.select_all_personal();
+        c = controller.select_all_personal();
 
-            while (c.moveToNext()) {
-                // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
-                double lt = c.getDouble(c.getColumnIndex("latitude"));
-                double lg = c.getDouble(c.getColumnIndex("longitude"));
-                String name = c.getString(c.getColumnIndex("name"));
+        while (c.moveToNext()) {
+            // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+            double lt = c.getDouble(c.getColumnIndex("latitude"));
+            double lg = c.getDouble(c.getColumnIndex("longitude"));
+            String name = c.getString(c.getColumnIndex("name"));
 
-                send_personal.sendData8("",Double.toString(lt),Double.toString(lg),name);
-            }
+            send_personal.sendData8(url,Double.toString(lt),Double.toString(lg),name,userID);
+
+            Log.d("upload","checking : " + send_personal.get_check());
         }
+
     }
 
     public void logout_clicked(View view){
@@ -87,6 +92,8 @@ public class Setting extends Activity {
         authActivity.kakaoLogout();;*/
         kakaoActivity kakao = new kakaoActivity();
         kakao.kakaoLogout();
+
+        controller.delete_login();
 
         startActivityForResult(new Intent(this,LoginActivity.class),1);
         initialize();
