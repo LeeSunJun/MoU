@@ -85,8 +85,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     String myJSON;
 
-    String userPic;
-
     String gpa_url_send;
     String review_url;
 
@@ -98,6 +96,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     String Name;
     String ID;
+    String userPic = "";
 
     TextView mark_name;
 
@@ -115,7 +114,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private SensorManager sensorManager; //to manage sensor
     private Sensor sensor; // sensor
     float bearing;
-    //String marker_name;
+
     String current_marker_name;
     EditText text;
 
@@ -159,6 +158,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             Toast.makeText(this, "Marker Adding is success", Toast.LENGTH_SHORT).show();
         } else if( requestCode == 7){
             userPic = data.getStringExtra("profilePic");
+            //controller.set_profile(userPic);
+
             ImageView iv = (ImageView) findViewById(R.id.profilPic);
             Picasso.with(context)
                     .load(userPic)
@@ -170,8 +171,24 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        startActivityForResult(new Intent(this,LoginActivity.class),1);
+        controller = new DBHandler(getApplicationContext());
         startActivity(new Intent(this,ParsingActivity.class)); // getData from resource;
+
+        Cursor c = controller.get_login_info();
+        int check = c.getCount();
+
+        if(check == 0)
+            startActivityForResult(new Intent(this,LoginActivity.class),1);
+        else {
+            c.moveToNext();
+
+            ID = c.getString(c.getColumnIndex("ID"));
+
+            Log.d("login",ID);
+
+            Name = c.getString(c.getColumnIndex("name"));
+            userPic = c.getString(c.getColumnIndex("profile"));
+        }
 
         LT = 37.49639;
         LG = 126.956889;
@@ -179,8 +196,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_view);
-
-        controller = new DBHandler(getApplicationContext());
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -200,6 +215,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         send_mark = new SendData();
 
         mark_info = (LinearLayout) findViewById(R.id.mark_info);
+
+        mark_info.setVisibility(View.GONE);
+        mark_info_open = false;
 
         mark_name = (TextView)findViewById(R.id.mark_name);
 
@@ -510,6 +528,36 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void menu_clicked(View v) {
 
+        Cursor c = controller.get_login_info();
+        int check = c.getCount();
+
+        if(check == 0)
+            startActivityForResult(new Intent(this,LoginActivity.class),1);
+        else {
+            c.moveToNext();
+
+            ID = c.getString(c.getColumnIndex("ID"));
+
+            Log.d("login",ID);
+
+            Name = c.getString(c.getColumnIndex("name"));
+            userPic = c.getString(c.getColumnIndex("profile"));
+
+            TextView id = (TextView)findViewById(R.id.id);
+            id.setText(ID);
+            TextView name =(TextView)findViewById(R.id.name);
+            name.setText(Name);
+
+            if(!userPic.isEmpty()) {
+                ImageView profile = (ImageView)findViewById(R.id.profilPic);
+                Picasso.with(context)
+                        .load(userPic)
+                        .transform(new CropCircleTransformation())
+                        .into(profile);
+            }
+
+        }
+
         LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
 
         if(drawer.getVisibility() == View.GONE)
@@ -798,6 +846,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     public void setting_clicked(View v){
         Intent intent = new Intent(getBaseContext(), Setting.class);
         intent.putExtra("userID",ID);
+
+        LinearLayout drawer = (LinearLayout) findViewById(R.id.drawer);
+        drawer.setVisibility(View.GONE);
+
         startActivityForResult(intent,1);
     }
 
@@ -952,7 +1004,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         intent.putExtra("UserID", ID);
         intent.putExtra("MarkID", Integer.toString(markid));
         intent.putExtra("Category", Integer.toString(category));
-        intent.putExtra("UserPic", userPic);
+        intent.putExtra("UserPic", "");
         Log.d("Url_send",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
 
         startActivity(intent);

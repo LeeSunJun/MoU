@@ -55,7 +55,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             db.execSQL(sql);
 
             sql = "create table Login (" +
-                    "id text, " +
+                    "ID text, " +
                     "name text, " +
                     "profile text);";
 

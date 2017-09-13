@@ -171,6 +171,35 @@ public class DBHandler {
         Log.i("ddbb","정상적으로 삭제 되었습니다.");
     }
 
+    //for Login
+
+    public void insert_login(String id, String name, String url) {
+        db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("ID", id);
+        values.put("name", name);
+        values.put("profile", url);
+
+        db.insert("Login", null, values);
+    }
+
+    public Cursor get_login_info() {
+        db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
+        Cursor c = db.rawQuery("select * from Login", null);
+
+        return c;
+    }
+
+    public void set_profile (String url) {
+        db = helper.getWritableDatabase(); //db 객체를 얻어온다. 쓰기가능
+
+        db.execSQL("Update Login set profile = " + url);
+
+        Log.d("ddbb", "1023");
+    }
+
     public void delete_login () {
         db = helper.getWritableDatabase();
         db.delete("Login",null,null);

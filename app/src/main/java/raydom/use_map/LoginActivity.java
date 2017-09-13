@@ -29,6 +29,8 @@ public class LoginActivity extends Activity {
 
     SendData send_login;
 
+    DBHandler controller;
+
     EditText ID;
     EditText PW;
 
@@ -50,6 +52,8 @@ public class LoginActivity extends Activity {
         PW = (EditText)findViewById(R.id.pw_edit);
 
         send_login = new SendData();
+
+        controller = new DBHandler(getApplicationContext());
 
         parsing_data("login_info.csv");
     }
@@ -77,6 +81,8 @@ public class LoginActivity extends Activity {
             intent.putExtra("ID",myID);
             intent.putExtra("NAME", myName);
             setResult(RESULT_OK,intent);
+
+            controller.insert_login(myID,myName,"");
 
             initialize();
         }

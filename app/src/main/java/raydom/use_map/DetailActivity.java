@@ -119,10 +119,12 @@ public class DetailActivity extends Activity {
                 .load(url)
                 .into(main_image);
 
-        Picasso.with(context)
-                .load(UserPic)
-                .transform(new CropCircleTransformation())
-                .into(profile);
+        if(!UserPic.isEmpty()) {
+            Picasso.with(context)
+                    .load(UserPic)
+                    .transform(new CropCircleTransformation())
+                    .into(profile);
+        }
 
         TextView name = (TextView)findViewById(R.id.text_userID);
         name.setText(UserID);
