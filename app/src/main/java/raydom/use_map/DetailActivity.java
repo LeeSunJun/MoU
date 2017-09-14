@@ -49,13 +49,18 @@ public class DetailActivity extends Activity {
     ArrayList<Integer> stars;
     ArrayList<String> review_gorup;
 
+    DBHandler controller;
+
     String userPic;
 
     @Override
     protected  void onActivityResult(int requestCode, int resultCode,Intent data) {
         if( requestCode == 7){
             userPic = data.getStringExtra("profilePic");
-            ImageView iv = (ImageView) findViewById(R.id.profilPic);
+            ImageView iv = (ImageView) findViewById(R.id.user_icon);
+
+            controller.set_profile(userPic);
+
             Picasso.with(context)
                     .load(userPic)
                     .transform(new CropCircleTransformation())
@@ -68,6 +73,8 @@ public class DetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_view);
+
+        controller = new DBHandler(getApplication());
 
         names = new ArrayList<String>();
         stars = new ArrayList<Integer>();
@@ -124,6 +131,11 @@ public class DetailActivity extends Activity {
                     .load(UserPic)
                     .transform(new CropCircleTransformation())
                     .into(profile);
+        } else {
+            Picasso.with(context)
+                    .load("https://i.imgur.com/kZgHxcZ.png")
+                    .transform(new CropCircleTransformation())
+                    .into(profile);
         }
 
         TextView name = (TextView)findViewById(R.id.text_userID);
@@ -141,6 +153,23 @@ public class DetailActivity extends Activity {
         };
 
         handler.sendEmptyMessageDelayed(0,1500);
+    }
+
+    public void star0_setting() {
+        ImageButton star;
+
+        star = (ImageButton) findViewById(R.id.star1);
+        star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
+        star = (ImageButton) findViewById(R.id.star2);
+        star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
+        star = (ImageButton) findViewById(R.id.star3);
+        star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
+        star = (ImageButton) findViewById(R.id.star4);
+        star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
+        star = (ImageButton) findViewById(R.id.star5);
+        star.setBackgroundDrawable(getResources().getDrawable(R.drawable.blank_star));
+
+        star_point = "0";
     }
 
     public void star1_clicked(View v) {
@@ -232,6 +261,8 @@ public class DetailActivity extends Activity {
         EditText cm = (EditText)findViewById(R.id.comment);
         review = cm.getText().toString();
 
+        cm.setText("");
+
         Log.d("cm",review);
 
         if(MarkID.equals("Guest")) {
@@ -264,6 +295,8 @@ public class DetailActivity extends Activity {
 
                 set_Reviews();
                 Log.d("review","show all");
+
+                star0_setting();
             }
         }
     }

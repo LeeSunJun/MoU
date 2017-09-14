@@ -93,6 +93,7 @@ public class Setting extends Activity {
         kakao.kakaoLogout();
 
         controller.delete_login();
+        controller.delete_personal();
 
         startActivityForResult(new Intent(this,LoginActivity.class),1);
         initialize();

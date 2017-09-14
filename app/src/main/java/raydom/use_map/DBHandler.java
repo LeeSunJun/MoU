@@ -195,7 +195,7 @@ public class DBHandler {
     public void set_profile (String url) {
         db = helper.getWritableDatabase(); //db 객체를 얻어온다. 쓰기가능
 
-        db.execSQL("Update Login set profile = " + url);
+        db.execSQL("Update Login set profile = '" + url + "'");
 
         Log.d("ddbb", "1023");
     }
@@ -203,6 +203,12 @@ public class DBHandler {
     public void delete_login () {
         db = helper.getWritableDatabase();
         db.delete("Login",null,null);
+        Log.i("ddbb","정상적으로 삭제 되었습니다.");
+    }
+
+    public void delete_personal () {
+        db = helper.getWritableDatabase();
+        db.delete("personal",null,null);
         Log.i("ddbb","정상적으로 삭제 되었습니다.");
     }
 }

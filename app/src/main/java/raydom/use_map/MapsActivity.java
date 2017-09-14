@@ -158,7 +158,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             Toast.makeText(this, "Marker Adding is success", Toast.LENGTH_SHORT).show();
         } else if( requestCode == 7){
             userPic = data.getStringExtra("profilePic");
-            //controller.set_profile(userPic);
+
+            controller.set_profile(userPic);
 
             ImageView iv = (ImageView) findViewById(R.id.profilPic);
             Picasso.with(context)
@@ -554,6 +555,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                         .load(userPic)
                         .transform(new CropCircleTransformation())
                         .into(profile);
+            } else {
+                ImageView profile = (ImageView)findViewById(R.id.profilPic);
+                Picasso.with(context)
+                        .load("https://i.imgur.com/kZgHxcZ.png")
+                        .transform(new CropCircleTransformation())
+                        .into(profile);
             }
 
         }
@@ -896,6 +903,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             double lg = c.getDouble(c.getColumnIndex("longitude"));
             String name = c.getString(c.getColumnIndex("name"));
 
+            Log.d("personal" , "getting point : " + lt + lg + name);
+
             mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
                     .position(new LatLng(lt, lg)).title(name).zIndex(1.0f));
         }
@@ -1004,7 +1013,13 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         intent.putExtra("UserID", ID);
         intent.putExtra("MarkID", Integer.toString(markid));
         intent.putExtra("Category", Integer.toString(category));
-        intent.putExtra("UserPic", "");
+
+        if(userPic.isEmpty())
+            intent.putExtra("UserPic", "");
+        else {
+            intent.putExtra("UserPic", userPic);
+        }
+
         Log.d("Url_send",get_url(tmp_marker.getPosition().latitude,tmp_marker.getPosition().longitude));
 
         startActivity(intent);

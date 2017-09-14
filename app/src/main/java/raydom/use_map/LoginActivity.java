@@ -31,6 +31,12 @@ public class LoginActivity extends Activity {
 
     DBHandler controller;
 
+    String lg;
+    String lt;
+    String name;
+
+    String myJSON;
+
     EditText ID;
     EditText PW;
 
@@ -84,6 +90,16 @@ public class LoginActivity extends Activity {
 
             controller.insert_login(myID,myName,"");
 
+            String url = "http://52.79.121.208/favorite/private_read.php";
+
+            SendData personal_getting = new SendData();
+
+            String personal_data = personal_getting.sendData9(url,myID);
+
+            Log.d("personal" , personal_data);
+
+            parse_personal(personal_data);
+
             initialize();
         }
     }
@@ -98,6 +114,9 @@ public class LoginActivity extends Activity {
         Intent intent = new Intent();
         intent.putExtra("ID","Guest");
         intent.putExtra("NAME", "Guest");
+
+        controller.insert_login("Guest","Guest","");
+
         setResult(RESULT_OK,intent);
 
         initialize();
@@ -177,6 +196,37 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
             Log.d("JUN", e.toString());
         }
+    }
+
+    public void parse_personal(String json) {
+
+        try {
+            JSONArray JA = new JSONArray(json);
+
+            Log.d("personal" , "length : " + JA.length());
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                Log.d("personal","All contents : " + c);
+
+                lg = c.getString("longitude");
+                lt = c.getString("latitude");
+                name = c.getString("MarkerName");
+
+                Log.d("personal", "name : " + name);
+
+                controller.insert_personal(Double.parseDouble(lt),Double.parseDouble(lg),"");
+
+                Log.d("personal", "complete");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
+        }
+
+        Log.d("personal", "end");
     }
 
     /*
