@@ -1010,6 +1010,15 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
+    public void ChattingClicked(View v){
+        Intent intent = new Intent(this, GroupChatList.class);
+        intent.putExtra("ID",ID);
+        startActivity(intent);
+
+        //startActivity(new Intent(this,SplashActivity.class));
+    }
+
+
     // delete
     public void delete (double id) {
         db = helper.getWritableDatabase();

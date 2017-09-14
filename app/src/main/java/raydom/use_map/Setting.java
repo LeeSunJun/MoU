@@ -56,7 +56,6 @@ public class Setting extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
-
             Toast.makeText(Setting.this, "결과가 성공이 아님.", Toast.LENGTH_SHORT).show();
             return;
         }

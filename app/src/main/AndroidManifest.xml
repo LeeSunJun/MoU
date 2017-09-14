@@ -58,6 +58,8 @@
         <activity android:name=".Setting"/>
         <activity android:name=".kakaoActivity"/>
         <activity android:name=".DetailActivity"/>
+        <activity android:name=".GroupChatList"/>
+        <activity android:name=".ChatRoom"/>
 
     </application>
 
