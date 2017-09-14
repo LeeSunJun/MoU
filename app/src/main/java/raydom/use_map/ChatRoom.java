@@ -6,6 +6,7 @@ package raydom.use_map;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +18,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import java.util.Date;
 
 public class ChatRoom  extends AppCompatActivity{
 
@@ -31,6 +33,9 @@ public class ChatRoom  extends AppCompatActivity{
     private String user_name,room_name;
     private DatabaseReference root ;
     private String temp_key;
+    private String time;
+    private Button send_button;
+    SimpleDateFormat sdf;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class ChatRoom  extends AppCompatActivity{
         room_name = getIntent().getExtras().get("room_name").toString();
 
         setTitle(" Room - "+room_name);
-
+        sdf = new SimpleDateFormat("MM-dd HH:mm");
         root = FirebaseDatabase.getInstance().getReference().child(room_name);
 
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
@@ -60,8 +65,10 @@ public class ChatRoom  extends AppCompatActivity{
                 Map<String,Object> map2 = new HashMap<String, Object>();
                 map2.put("name",user_name);
                 map2.put("msg",input_msg.getText().toString());
-
+                time = sdf.format(new Date()).toString();
+                map2.put("time",time);
                 message_root.updateChildren(map2);
+                input_msg.setText("");
             }
         });
 
@@ -97,7 +104,7 @@ public class ChatRoom  extends AppCompatActivity{
 
     }
 
-    private String chat_msg,chat_user_name;
+    private String chat_msg,chat_user_name,chat_time;
 
     private void append_chat_conversation(DataSnapshot dataSnapshot) {
 
@@ -107,8 +114,8 @@ public class ChatRoom  extends AppCompatActivity{
 
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-
-            chat_conversation.append(chat_user_name +" : "+chat_msg +" \n");
+            chat_time = (String) ((DataSnapshot)i.next()).getValue();
+            chat_conversation.append(chat_user_name +" : "+chat_msg +" \n"+chat_time+" \n");
         }
 
 
