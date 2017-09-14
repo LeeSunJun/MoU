@@ -13,7 +13,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     /*
     * sql을 사용하기 위한 제반 클래스
-    * SQLiteOpenHelper는 사용에 도움을 주는 클래스이다.
+    * SQLiteOpenHelper는 사용에 도움을 주는 클래스
     */
         public DBOpenHelper(Context context, String name,
                             CursorFactory factory, int version) {
