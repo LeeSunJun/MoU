@@ -42,9 +42,7 @@ public class GroupChatList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_list);
-
         root = FirebaseDatabase.getInstance().getReference().getRoot();
-
         add_room = (Button) findViewById(R.id.btn_add_room);
         room_name = (EditText) findViewById(R.id.room_name_edittext);
         listView = (ListView) findViewById(R.id.listView);
@@ -89,13 +87,10 @@ public class GroupChatList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent intent = new Intent(getApplicationContext(),ChatRoom.class);
-                //intent.putExtra("room_name",((TextView)view).getText().toString() );
-                intent.putExtra("room_name",room_name.getText());
+                intent.putExtra("room_name",((TextView)view).getText().toString() );
                 intent.putExtra("user_name",id);
                 startActivity(intent);
             }
         });
-
     }
-
 }
