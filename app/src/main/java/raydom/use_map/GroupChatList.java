@@ -43,8 +43,6 @@ public class GroupChatList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_list);
         root = FirebaseDatabase.getInstance().getReference().getRoot();
-        add_room = (Button) findViewById(R.id.btn_add_room);
-        room_name = (EditText) findViewById(R.id.room_name_edittext);
         listView = (ListView) findViewById(R.id.listView);
 
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list_of_rooms);
@@ -52,14 +50,6 @@ public class GroupChatList extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
         id = getIntent().getStringExtra("ID");
 
-        add_room.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Map<String,Object> map = new HashMap<String, Object>();
-                map.put(room_name.getText().toString(),"");
-                root.updateChildren(map);
-            }
-        });
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

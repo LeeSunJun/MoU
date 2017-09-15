@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -174,7 +175,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         controller = new DBHandler(getApplicationContext());
         startActivity(new Intent(this,ParsingActivity.class)); // getData from resource;
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Cursor c = controller.get_login_info();
         int check = c.getCount();
 
@@ -266,7 +267,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 try{
                     if(mGeo.isChecked()){
                         mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_on));
-                        sensorManager.registerListener(mSensorEventListener, sensor, SensorManager.SENSOR_DELAY_FASTEST); //connect manager to listner
+                        sensorManager.registerListener(mSensorEventListener, sensor, SensorManager.SENSOR_DELAY_GAME); //connect manager to listner
 
                     }
                     else{
@@ -398,6 +399,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 if(mGeo.isChecked()) {
                     updatemap(bearing); //change map
+                    bearing = 0;
                 }
             }
             else{
@@ -417,6 +419,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         CameraPosition oldPos = CameraPosition.fromLatLngZoom(loc, mMap.getCameraPosition().zoom); //get cameraposition from loc
         CameraPosition pos = CameraPosition.builder(oldPos).bearing(bearing).build();// build pos with bearing
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+        //mMap.animateCamera(CameraUpdateFactory.newCameraPosition(pos),400,null);
     }
 
         /**
