@@ -247,9 +247,15 @@ public class SendData {
     }
 
     //send LT,LG and options for adding marker
-    public void sendData3(String url, String latitude, String longitude, String name, String op1, String op2, String file){
+    public String sendData3(String url, String latitude, String longitude, String name, String op1, String op2, String file){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String result;
+
+            public String get_Result() {
+                return result;
+            }
 
             @Override
             public Void doInBackground(String... params) {
@@ -264,7 +270,7 @@ public class SendData {
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                     conn.setConnectTimeout(2000);
-                    conn.setReadTimeout(2000);
+                    conn.setReadTimeout(20000);
                     conn.setRequestMethod("POST");
                     conn.setDoInput(true);
                     conn.setDoOutput(true);
@@ -296,6 +302,7 @@ public class SendData {
                     br.close();
 
                     String res = response.toString();
+                    result = res;
 
                     Log.d("Ray","result 2 : "+res);
 
@@ -306,6 +313,8 @@ public class SendData {
                 return null;
             }
         }
+
+        HttpUtil util = new HttpUtil();
 
         try {
             JSONObject jsonObject = new JSONObject();
@@ -363,12 +372,16 @@ public class SendData {
 
             String json = jsonObject.toString();
 
-            new HttpUtil().execute(url,json);
+            util.execute(url,json);
+
             Log.d("Url","10");
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return util.get_Result();
     }
 
     //send LT,LG,CT for getting gpa

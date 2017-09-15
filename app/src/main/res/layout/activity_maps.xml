@@ -22,14 +22,6 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="10sp"/>
 
-    <ToggleButton
-        android:id="@+id/mGeo"
-        android:layout_width="80sp"
-        android:layout_height="80sp"
-        android:layout_above="@+id/mGPS"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="10sp"/>
-
     <Button
         android:layout_width="80sp"
         android:layout_height="80sp"

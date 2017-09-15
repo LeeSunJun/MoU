@@ -104,7 +104,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     ToggleButton mGPS;
-    ToggleButton mGeo;
 
     int category = 0;
     int markid;
@@ -176,6 +175,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         controller = new DBHandler(getApplicationContext());
         startActivity(new Intent(this,ParsingActivity.class)); // getData from resource;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Cursor c = controller.get_login_info();
         int check = c.getCount();
 
@@ -226,9 +226,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         mGPS = (ToggleButton)findViewById(R.id.mGPS);
         mGPS.setBackgroundDrawable(getResources().getDrawable(R.drawable.gps_off_1));
 
-        mGeo = (ToggleButton)findViewById(R.id.mGeo);
-        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
-
         mark_image = (ImageView)findViewById(R.id.mark_image);
 
         final LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -254,26 +251,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                         show_mark(category);
 
                         here.setVisible(false);
-                    }
-                }catch(SecurityException ex){
-
-                }
-            }
-        });
-
-        mGeo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                try{
-                    if(mGeo.isChecked()){
-                        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_on));
-                        sensorManager.registerListener(mSensorEventListener, sensor, SensorManager.SENSOR_DELAY_GAME); //connect manager to listner
-
-                    }
-                    else{
-                        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
-                        sensorManager.unregisterListener(mSensorEventListener);
-                        updatemap(180-bearing);
                     }
                 }catch(SecurityException ex){
 
@@ -397,10 +374,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 SensorManager.getOrientation(mRotationMatrix,orientation);//make matrix oriented
                 bearing = (float)Math.toDegrees(orientation[0])+mDeclination; //caculate bearing
 
-                if(mGeo.isChecked()) {
-                    updatemap(bearing); //change map
-                    bearing = 0;
-                }
             }
             else{
                 // Toast.makeText(MapsActivity.this,"waiting",Toast.LENGTH_SHORT).show();
@@ -419,7 +392,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         CameraPosition oldPos = CameraPosition.fromLatLngZoom(loc, mMap.getCameraPosition().zoom); //get cameraposition from loc
         CameraPosition pos = CameraPosition.builder(oldPos).bearing(bearing).build();// build pos with bearing
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
-        //mMap.animateCamera(CameraUpdateFactory.newCameraPosition(pos),400,null);
     }
 
         /**
@@ -515,9 +487,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                     mGPS.setBackgroundDrawable(getResources().getDrawable(R.drawable.gps_off_1));
                     mGPS.setChecked(false);
-
-                    mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
-                    mGeo.setChecked(false);
 
                     Log.d("TEST","Good1");
                 } else if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION) {
@@ -945,7 +914,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void searching_clicked(View v){
         mGPS.setChecked(false);
-        mGeo.setChecked(false);
         List<Address> list = null;
         String str = et.getText().toString();
         hideSoftKeyboard(this);
@@ -987,8 +955,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         b = findViewById(R.id.mGPS);
         b.setVisibility(View.GONE);
-        b = findViewById(R.id.mGeo);
-        b.setVisibility(View.GONE);
         b = findViewById(R.id.Address);
         b.setVisibility(View.GONE);
         b = findViewById(R.id.Search);
@@ -999,8 +965,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         View b;
 
         b = findViewById(R.id.mGPS);
-        b.setVisibility(View.VISIBLE);
-        b = findViewById(R.id.mGeo);
         b.setVisibility(View.VISIBLE);
         b = findViewById(R.id.Address);
         b.setVisibility(View.VISIBLE);
