@@ -1,123 +1,81 @@
 package raydom.use_map;
 
-/**
- * Created by Administrator on 2017-09-11.
- */
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ChatRoom  extends AppCompatActivity{
+/**
+ * Created by Administrator on 2017-09-15.
+ */
 
-    private Button btn_send_msg;
-    private EditText input_msg;
-    private TextView chat_conversation;
+public class ChatRoom extends AppCompatActivity {
 
-    private String user_name,room_name;
+    ListView listView;
     private DatabaseReference root ;
     private String temp_key;
+    private String user_name,room_name;
     private String time;
-    private Button send_button;
     SimpleDateFormat sdf;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.group_chat_room);
+        setContentView(R.layout.chat_room);
 
-        btn_send_msg = (Button) findViewById(R.id.btn_send);
-        input_msg = (EditText) findViewById(R.id.msg_input);
-        chat_conversation = (TextView) findViewById(R.id.textView);
-
+        sdf = new SimpleDateFormat("MM-dd HH:mm");
         user_name = getIntent().getExtras().get("user_name").toString();
         room_name = getIntent().getExtras().get("room_name").toString();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        setTitle(room_name);
 
-        setTitle(" Room - "+room_name);
-        sdf = new SimpleDateFormat("MM-dd HH:mm");
+        listView = (ListView) findViewById(R.id.list);
+
+        final EditText input = (EditText) findViewById(R.id.input);
+
         root = FirebaseDatabase.getInstance().getReference().child(room_name);
 
-        btn_send_msg.setOnClickListener(new View.OnClickListener() {
+        showAllOldMessgaes();
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Map<String,Object> map = new HashMap<String, Object>();
-                temp_key = root.push().getKey();
-                root.updateChildren(map);
-
-                DatabaseReference message_root = root.child(temp_key);
-                Map<String,Object> map2 = new HashMap<String, Object>();
-                map2.put("name",user_name);
-                map2.put("msg",input_msg.getText().toString());
-                time = sdf.format(new Date()).toString();
-                map2.put("time",time);
-                message_root.updateChildren(map2);
-                input_msg.setText("");
+                if (input.getText().toString().trim().equals("")) {
+                    Toast.makeText(ChatRoom.this, "Please enter some texts!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Map<String,Object> map = new HashMap<String, Object>();
+                    temp_key = root.push().getKey();
+                    root.updateChildren(map);
+                    DatabaseReference message_root = root.child(temp_key);
+                    Map<String,Object> map2 = new HashMap<String, Object>();
+                    map2.put("name",user_name);
+                    map2.put("msg",input.getText().toString());
+                    time = sdf.format(new Date()).toString();
+                    map2.put("time",time);
+                    message_root.updateChildren(map2);
+                    input.setText("");
+                }
             }
         });
-
-        root.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                append_chat_conversation(dataSnapshot);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                append_chat_conversation(dataSnapshot);
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
-
-    private String chat_msg,chat_user_name,chat_time;
-
-    private void append_chat_conversation(DataSnapshot dataSnapshot) {
-
-        Iterator i = dataSnapshot.getChildren().iterator();
-
-        while (i.hasNext()){
-
-            chat_msg = (String) ((DataSnapshot)i.next()).getValue();
-            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-            chat_time = (String) ((DataSnapshot)i.next()).getValue();
-            chat_conversation.append(chat_user_name +" : "+chat_msg +" \n"+chat_time+" \n");
-        }
-
-
+    private void showAllOldMessgaes(){
+        MessageAdapter adapter = new MessageAdapter(this, ChatMessage.class, R.layout.item_in_message,root);
+        listView.setAdapter(adapter);
+    }
+    public String getUserName(){
+        return user_name;
     }
 }

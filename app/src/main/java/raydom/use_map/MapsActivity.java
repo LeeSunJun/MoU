@@ -1029,9 +1029,14 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void ChattingClicked(View v){
-        Intent intent = new Intent(this, GroupChatList.class);
-        intent.putExtra("ID",ID);
-        startActivity(intent);
+        if(ID.compareTo("Guest") !=0 ) {
+            Intent intent = new Intent(this, GroupChatList.class);
+            intent.putExtra("ID", ID);
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this, "You have to Log in first", Toast.LENGTH_SHORT).show();
+        }
 
         //startActivity(new Intent(this,SplashActivity.class));
     }

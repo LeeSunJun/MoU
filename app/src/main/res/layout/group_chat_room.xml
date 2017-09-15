@@ -32,10 +32,10 @@
         android:layout_alignEnd="@+id/btn_send">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:padding="15dp"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:id="@+id/textView" />
     </ScrollView>
 </RelativeLayout>
