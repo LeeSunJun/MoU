@@ -226,6 +226,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         mGPS.setBackgroundDrawable(getResources().getDrawable(R.drawable.gps_off_1));
 
         mGeo = (ToggleButton)findViewById(R.id.mGeo);
+        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
 
         mark_image = (ImageView)findViewById(R.id.mark_image);
 
@@ -264,11 +265,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             public void onClick(View v){
                 try{
                     if(mGeo.isChecked()){
-
+                        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_on));
                         sensorManager.registerListener(mSensorEventListener, sensor, SensorManager.SENSOR_DELAY_FASTEST); //connect manager to listner
 
                     }
                     else{
+                        mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
                         sensorManager.unregisterListener(mSensorEventListener);
                         updatemap(180-bearing);
                     }
@@ -511,6 +513,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     mGPS.setBackgroundDrawable(getResources().getDrawable(R.drawable.gps_off_1));
                     mGPS.setChecked(false);
 
+                    mGeo.setBackgroundDrawable(getResources().getDrawable(R.drawable.gyro_icon_off));
                     mGeo.setChecked(false);
 
                     Log.d("TEST","Good1");
