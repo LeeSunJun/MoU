@@ -319,12 +319,35 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 mMap.setOnMapClickListener(null);
 
-                RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
+                /*RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
                 add_m.bringToFront();
-                add_m.setVisibility(View.VISIBLE);
+                add_m.setVisibility(View.VISIBLE);*/
 
                 View t = findViewById(R.id.cover);
                 t.setVisibility(View.GONE);
+
+                AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
+                alt_bld
+                        .setMessage("here?")
+                        .setCancelable(false)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){ // left button
+                                double latitude = here.getPosition().latitude;
+                                double longitude = here.getPosition().longitude;
+                                Toast.makeText(getApplicationContext(), "Yes. The position is "+latitude+longitude , Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("NO",new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id) { // right button
+                                mMap.clear();
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = alt_bld.create();
+                alert.setTitle("Select Type");
+                alert.setIcon(R.drawable.main_logo);
+                alert.show();
             }
         });
     }
