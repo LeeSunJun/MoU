@@ -272,6 +272,41 @@
 
                     </LinearLayout>
 
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20sp"
+                        android:background="@null"
+                        android:textSize="30sp"
+                        android:textColor="#FF000000"
+                        android:textAlignment="viewStart"
+                        android:text="Others"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2sp"
+                        android:background="#FFB6B6B6"/>
+
+                    <LinearLayout
+                        android:id="@+id/board_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30sp"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10sp"
+                            android:layout_marginLeft="10sp"
+                            android:background="@drawable/gray_button_click"
+                            android:textSize="22sp"
+                            android:textAlignment="viewStart"
+                            android:text="Board Marker"
+                            android:onClick="board_b_clicked"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </ScrollView>

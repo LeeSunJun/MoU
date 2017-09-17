@@ -62,27 +62,7 @@ public class ParsingActivity extends Activity {
 
         //getData("http://52.79.121.208/publicdata/statue.php",4);
 
-        //initialize();
-
-        /*parsing_data("toilet_DJ.csv",1);
-        parsing_data("toilet_GA.csv",1);
-
-        parsing_data2("LM_statue.csv",4);*/
-
-
-        //for csv
-        //parsing_data("SmokingArea.csv",3);
-        //parsing_data("wifi_DJ.csv",2);
-
-        //parsing_data("toilet_DJ.csv",1);
-        //parsing_data("toilet_GA.csv",1);
-
-        //parsing_data2("LM_statue.csv",4);
-
         initialize();
-
-
-        //for csv until here
     }
 
 

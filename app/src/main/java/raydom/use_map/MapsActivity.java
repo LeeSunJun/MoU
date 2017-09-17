@@ -84,8 +84,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     SendData send_mark;
 
-    String myJSON;
-
     String gpa_url_send;
     String review_url;
 
@@ -709,6 +707,109 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             drawer.setVisibility(View.GONE);
     }
 
+    public void personal_b_clicked(View v) {
+        mMap.clear();
+
+        Cursor c = controller.select_all_personal();
+        startManagingCursor(c);
+
+        Log.d("ddbb", "get Cursor");
+
+        while (c.moveToNext()) {
+            // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+            double lt = c.getDouble(c.getColumnIndex("latitude"));
+            double lg = c.getDouble(c.getColumnIndex("longitude"));
+            String name = c.getString(c.getColumnIndex("name"));
+
+            Log.d("personal" , "getting point : " + lt + lg + name);
+
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                    .position(new LatLng(lt, lg)).title(name).zIndex(1.0f));
+        }
+
+        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
+
+        if(drawer.getVisibility() == View.VISIBLE)
+            drawer.setVisibility(View.GONE);
+    }
+
+    public void board_b_clicked(View v) {
+        //getData("http://52.79.121.208/board/board_read.php");
+
+        category = 6;
+
+        if(mGPS.isChecked()) {
+            here = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.here_1)).position(new LatLng(LT, LG)).title("You").zIndex(10.0f));
+            here.setVisible(true);
+        }
+
+        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
+
+        if(drawer.getVisibility() == View.VISIBLE)
+            drawer.setVisibility(View.GONE);
+    }
+
+    public void setting_clicked(View v){
+        Intent intent = new Intent(getBaseContext(), Setting.class);
+        intent.putExtra("userID",ID);
+
+        LinearLayout drawer = (LinearLayout) findViewById(R.id.drawer);
+        drawer.setVisibility(View.GONE);
+
+        startActivityForResult(intent,1);
+    }
+
+    public void add_ok_clicked(View v){
+
+        show_mark(category);
+
+        DIY.setVisible(false);
+
+        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
+        add_m.setVisibility(View.GONE);
+
+        view_visible();
+
+        Intent ADD = new Intent(this,ADD_Marker.class);
+
+        ADD.putExtra("Result_LT",Double.toString(DIY_LT));
+        ADD.putExtra("Result_LG",Double.toString(DIY_LG));
+
+        startActivityForResult(ADD,4);
+    }
+
+    public void add_no_clicked(View v){
+
+        DIY.setVisible(false);
+
+        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
+        add_m.setVisibility(View.GONE);
+
+        view_visible();
+    }
+
+    public void personal_add() {
+
+        Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
+        startManagingCursor(c);
+
+        c.moveToNext();
+        int id = c.getInt(c.getColumnIndex("id"));
+        Log.d("ddbb","id : " + id);
+        int ct = c.getInt(c.getColumnIndex("category"));
+        Log.d("ddbb","ct : " + ct);
+        int bm = c.getInt(c.getColumnIndex("bm"));
+        Log.d("ddbb","bm : " + bm);
+
+        controller.set_personal(id,ct,bm);
+
+        if(bm == 0 ) {
+            tmp_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+        } else {
+            tmp_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
+    }
+
     public void DIY_add_clicked(View v){
         if(ID.compareTo("Guest") != 0) {
 
@@ -737,9 +838,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             Toast.makeText(this, "You have to log in with Mou ID", Toast.LENGTH_LONG).show();
         }
     }
-     public void bm_add_clicked(View v) {
-         add_type = 1;
-         addMarkerDialog();
+
+    public void bm_add_clicked(View v) {
+        add_type = 1;
+        addMarkerDialog();
     }
 
     private void addMarkerDialog(){ // Select my position marker or exist market
@@ -845,93 +947,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             // TODO Auto-generated catch block
             Log.e("name not found", e.toString());
-        }
-    }
-
-    public void setting_clicked(View v){
-        Intent intent = new Intent(getBaseContext(), Setting.class);
-        intent.putExtra("userID",ID);
-
-        LinearLayout drawer = (LinearLayout) findViewById(R.id.drawer);
-        drawer.setVisibility(View.GONE);
-
-        startActivityForResult(intent,1);
-    }
-
-    public void add_ok_clicked(View v){
-
-        show_mark(category);
-
-        DIY.setVisible(false);
-
-        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
-        add_m.setVisibility(View.GONE);
-
-        view_visible();
-
-        Intent ADD = new Intent(this,ADD_Marker.class);
-
-        ADD.putExtra("Result_LT",Double.toString(DIY_LT));
-        ADD.putExtra("Result_LG",Double.toString(DIY_LG));
-
-        startActivityForResult(ADD,4);
-    }
-
-    public void add_no_clicked(View v){
-
-        DIY.setVisible(false);
-
-        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
-        add_m.setVisibility(View.GONE);
-
-        view_visible();
-    }
-
-    public void personal_b_clicked(View v) {
-        mMap.clear();
-
-        Cursor c = controller.select_all_personal();
-        startManagingCursor(c);
-
-        Log.d("ddbb", "get Cursor");
-
-        while (c.moveToNext()) {
-            // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
-            double lt = c.getDouble(c.getColumnIndex("latitude"));
-            double lg = c.getDouble(c.getColumnIndex("longitude"));
-            String name = c.getString(c.getColumnIndex("name"));
-
-            Log.d("personal" , "getting point : " + lt + lg + name);
-
-            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                    .position(new LatLng(lt, lg)).title(name).zIndex(1.0f));
-        }
-
-        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
-
-        if(drawer.getVisibility() == View.VISIBLE)
-            drawer.setVisibility(View.GONE);
-    }
-
-    public void personal_add() {
-
-        Cursor c = controller.select_marker(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
-        startManagingCursor(c);
-
-        c.moveToNext();
-        int id = c.getInt(c.getColumnIndex("id"));
-        Log.d("ddbb","id : " + id);
-        int ct = c.getInt(c.getColumnIndex("category"));
-        Log.d("ddbb","ct : " + ct);
-        int bm = c.getInt(c.getColumnIndex("bm"));
-        Log.d("ddbb","bm : " + bm);
-
-        controller.set_personal(id,ct,bm);
-
-        if(bm == 0 ) {
-            tmp_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-        } else {
-            tmp_marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         }
     }
 
@@ -1163,12 +1178,43 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         return "No Name";
     }
 
+    public String parse_gpa(String json) {
+
+        String gpa = " ";
+
+        try {
+            JSONArray JA = new JSONArray(json);
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                Log.d("gpa", "All contents : " + c);
+                gpa = c.getString("GPA");
+            }
+
+            Log.d("gpa", gpa);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
+        }
+
+        return gpa;
+    }
+
+
     /*
      * anysc task 방식으로 php와의 통신(데이터를 받아옴)
      */
     public void getData(String url) {
 
         class GetDataJSON extends AsyncTask<String, Void, String> {
+
+            String myJSON;
+
+            public String getMyJSON(){
+                return  myJSON;
+            }
 
             @Override
             protected String doInBackground(String... params) {
@@ -1199,15 +1245,16 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             @Override
             protected void onPostExecute(String result) {
                 myJSON = result;
-
             }
         }
+
         GetDataJSON g = new GetDataJSON();
         g.execute(url);
 
+        parse_board(g.getMyJSON());
     }
 
-    public String parse_gpa(String json) {
+    public void parse_board(String json) {
 
         String gpa = " ";
 
@@ -1218,16 +1265,14 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 JSONObject c = JA.getJSONObject(i);
                 Log.d("gpa", "All contents : " + c);
-                gpa = c.getString("GPA");
+
             }
 
-            Log.d("gpa", gpa);
 
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d("JUN", e.toString());
         }
-
-        return gpa;
     }
+
 }
