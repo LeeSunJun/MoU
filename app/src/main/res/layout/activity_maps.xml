@@ -23,54 +23,23 @@
         android:layout_margin="10sp"/>
 
     <Button
+        android:id="@+id/chat_button"
         android:layout_width="80sp"
         android:layout_height="80sp"
-        android:text="chat"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="10sp"
         android:background="@drawable/chat_icon"
         android:onClick="ChattingClicked"/>
 
-    <RelativeLayout
-        android:layout_width="450dp"
-        android:layout_height="200dp"
-        android:id="@+id/m_check2"
-        android:background="#FFFFFFFF"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp">
-
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/add_no"
-            android:onClick="add_ok_clicked"
-            android:text="Yes"
-            android:background="#FF006FFF"
-            android:layout_margin="10dp" />
-
-        <Button
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:id="@+id/add_no"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:onClick="add_no_clicked"
-            android:text="No"
-            android:background="#FF006FFF"
-            android:layout_margin="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="11pt"
-            android:text="Do you want to add A Marker on this Location?"
-            android:layout_margin="20dp"/>
-
-    </RelativeLayout>
+    <Button
+        android:id="@+id/board_add_button"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/chat_button"
+        android:onClick="board_add_clicked"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -334,6 +335,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                                 double longitude = here.getPosition().longitude;
                                 Toast.makeText(getApplicationContext(), "Yes. The position is "+latitude+longitude , Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
+
+                                add_ok();
                             }
                         })
                         .setNegativeButton("NO",new DialogInterface.OnClickListener(){
@@ -736,6 +739,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     public void board_b_clicked(View v) {
         //getData("http://52.79.121.208/board/board_read.php");
 
+        setContentView(R.layout.activity_maps);
+        Button add_b = (Button)findViewById(R.id.board_add_button);
+
+        add_b.setVisibility(View.VISIBLE);
+
         category = 6;
 
         if(mGPS.isChecked()) {
@@ -749,6 +757,10 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
             drawer.setVisibility(View.GONE);
     }
 
+    public void board_add_clicked(View v) {
+
+    }
+
     public void setting_clicked(View v){
         Intent intent = new Intent(getBaseContext(), Setting.class);
         intent.putExtra("userID",ID);
@@ -759,14 +771,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         startActivityForResult(intent,1);
     }
 
-    public void add_ok_clicked(View v){
+    public void add_ok(){
 
         show_mark(category);
 
         DIY.setVisible(false);
-
-        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
-        add_m.setVisibility(View.GONE);
 
         view_visible();
 
@@ -776,16 +785,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         ADD.putExtra("Result_LG",Double.toString(DIY_LG));
 
         startActivityForResult(ADD,4);
-    }
-
-    public void add_no_clicked(View v){
-
-        DIY.setVisible(false);
-
-        RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
-        add_m.setVisibility(View.GONE);
-
-        view_visible();
     }
 
     public void personal_add() {
