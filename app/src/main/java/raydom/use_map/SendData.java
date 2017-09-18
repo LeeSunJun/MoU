@@ -53,6 +53,9 @@ public class SendData {
     String userID_TAG = "userID";
     String MarkerName_TAG = "MarkerName";
 
+    String title_TAG = "main";
+    String content_TAG = "text";
+
     int check = -1;
 
     void reset_checking() {
@@ -944,5 +947,85 @@ public class SendData {
         String result = util.get_result();
 
         return result;
+    }
+
+    //send LT,LG ,name for personal marker
+    public void sendData10(String url, String latitude, String longitude, String title, String userID, String content){
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+                    OutputStream os = conn.getOutputStream();
+                    os.write( outputInBytes );
+                    os.close();
+
+                    int retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    String res = response.toString();
+
+                    Log.d("Ray","result 2 : "+res);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(userID_TAG, userID);
+                jsonObject.put(LT_TAG, latitude);
+                jsonObject.put(LG_TAG, longitude);
+                jsonObject.put(title_TAG,title);
+                jsonObject.put(content_TAG,content);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            Log.d("Ray","upload : " + json);
+
+            new HttpUtil().execute(url,json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

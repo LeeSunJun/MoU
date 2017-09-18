@@ -318,10 +318,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 mMap.setOnMapClickListener(null);
 
-                /*RelativeLayout add_m = (RelativeLayout)findViewById(R.id.m_check2);
-                add_m.bringToFront();
-                add_m.setVisibility(View.VISIBLE);*/
-
                 View t = findViewById(R.id.cover);
                 t.setVisibility(View.GONE);
 
@@ -336,7 +332,18 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                                 Toast.makeText(getApplicationContext(), "Yes. The position is "+latitude+longitude , Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
 
-                                add_ok();
+                                if(add_type == 2) {
+                                    add_type = -1;
+                                    add_ok();
+                                } else if (add_type == 3) {
+                                    add_type = -1 ;
+
+                                    Intent intent = new Intent(context, AddBoardingActivity.class);
+                                    intent.putExtra("ID", ID);
+                                    intent.putExtra("LT",Double.toString(DIY_LT));
+                                    intent.putExtra("LG",Double.toString(DIY_LG));
+                                    startActivity(intent);
+                                }
                             }
                         })
                         .setNegativeButton("NO",new DialogInterface.OnClickListener(){
@@ -443,25 +450,49 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         mMap.setMinZoomPreference(5);
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
             @Override
             public boolean onMarkerClick(Marker marker) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 17.0f));
 
                 tmp_marker = marker;
 
-                if(marker.getPosition().latitude == here.getPosition().latitude && marker.getPosition().longitude == here.getPosition().longitude) {
+                if (marker.getPosition().latitude == here.getPosition().latitude && marker.getPosition().longitude == here.getPosition().longitude) {
                     return false;
 
-                } else if(add_type == 1) {
+                } else if (add_type == 1) {
                     personal_add();
                     add_type = -1;
 
                     mMap.clear();
 
-                    here = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.here_1)).position(new LatLng(LT,LG)).title("Title").zIndex(10.0f));
+                    here = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.here_1)).position(new LatLng(LT, LG)).title("Title").zIndex(10.0f));
                     show_mark(category);
 
                     return false;
+
+                } else if (marker.getAlpha() == 0) {
+                    AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
+                    alt_bld
+                            .setMessage("Is this marker really in that location?")
+                            .setCancelable(false)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) { // left button
+
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) { // right button
+
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert = alt_bld.create();
+                    alert.setTitle("Select Type");
+                    alert.setIcon(R.drawable.main_logo);
+                    alert.show();
 
                 } else {
                     mark_info.setVisibility(View.VISIBLE);
@@ -473,31 +504,33 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     c.moveToNext();
                     markid = c.getInt(c.getColumnIndex("id"));
 
-                    Log.d("review","id : "+markid);
+                    Log.d("review", "id : " + markid);
 
                     SendData tmp_send = new SendData();
-                    String res = tmp_send.sendData4(gpa_url_send,markid);
+                    String res = tmp_send.sendData4(gpa_url_send, markid);
 
-                    Log.d("review","here");
+                    Log.d("review", "here");
 
-                    if(!parse_gpa(res).isEmpty()) {
+                    if (!parse_gpa(res).isEmpty()) {
                         show_stars(Double.parseDouble(parse_gpa(res)));
                     }
 
-                    Log.d("gpa","mark id : "+markid);
+                    Log.d("gpa", "mark id : " + markid);
 
                     //마커 정보 보여주는 listener 구현 부
                     Picasso.with(context)
-                            .load(get_url(marker.getPosition().latitude,marker.getPosition().longitude))
+                            .load(get_url(marker.getPosition().latitude, marker.getPosition().longitude))
                             .transform(new CropCircleTransformation())
                             .into(mark_image);
 
-                    TextView marker_name = (TextView)findViewById(R.id.mark_name);
-                    Log.d("name_tag",get_name(marker.getPosition().latitude,marker.getPosition().longitude));
-                    marker_name.setText(get_name(marker.getPosition().latitude,marker.getPosition().longitude));
+                    TextView marker_name = (TextView) findViewById(R.id.mark_name);
+                    Log.d("name_tag", get_name(marker.getPosition().latitude, marker.getPosition().longitude));
+                    marker_name.setText(get_name(marker.getPosition().latitude, marker.getPosition().longitude));
 
                     return false;
                 }
+
+                return false;
             }
         });
 
@@ -737,9 +770,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void board_b_clicked(View v) {
-        //getData("http://52.79.121.208/board/board_read.php");
+        getData("http://52.79.121.208/board/board_read.php");
 
-        setContentView(R.layout.activity_maps);
         Button add_b = (Button)findViewById(R.id.board_add_button);
 
         add_b.setVisibility(View.VISIBLE);
@@ -759,6 +791,23 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     public void board_add_clicked(View v) {
 
+        if(ID.compareTo("Guest") !=0 ) {
+
+            Toast.makeText(this, "Click screen you want to add", Toast.LENGTH_SHORT).show();
+
+            add_type = 3;
+
+            mMap.clear();
+
+            View t = findViewById(R.id.cover);
+            t.setVisibility(View.VISIBLE);
+            view_invisible();
+
+            getClick();
+        }
+        else{
+            Toast.makeText(this, "You have to Log in first", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void setting_clicked(View v){
@@ -830,6 +879,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 View t = findViewById(R.id.cover);
                 t.setVisibility(View.VISIBLE);
                 view_invisible();
+
+                add_type = 2;
 
                 getClick();
             }
@@ -1041,8 +1092,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         else{
             Toast.makeText(this, "You have to Log in first", Toast.LENGTH_SHORT).show();
         }
-
-        //startActivity(new Intent(this,SplashActivity.class));
     }
 
 
@@ -1250,7 +1299,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         GetDataJSON g = new GetDataJSON();
         g.execute(url);
 
-        parse_board(g.getMyJSON());
+        //parse_board(g.getMyJSON());
     }
 
     public void parse_board(String json) {

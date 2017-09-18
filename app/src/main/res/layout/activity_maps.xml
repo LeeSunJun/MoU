@@ -38,6 +38,7 @@
         android:layout_height="80sp"
         android:layout_alignParentRight="true"
         android:layout_above="@id/chat_button"
+        android:layout_margin="10sp"
         android:onClick="board_add_clicked"
         android:visibility="gone"/>
 

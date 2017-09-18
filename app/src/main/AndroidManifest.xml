@@ -61,6 +61,7 @@
         <activity android:name=".GroupChatList"/>
         <activity android:name=".GroupChatRoom"/>
         <activity android:name=".ChatRoom"/>
+        <activity android:name=".AddBoardingActivity"/>
 
     </application>
 
