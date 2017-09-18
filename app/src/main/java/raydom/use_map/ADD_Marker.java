@@ -20,6 +20,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -55,6 +59,11 @@ public class ADD_Marker extends Activity {
     String LG,LT;
     String option1,option2;
 
+    String diy_id;
+    String diy_url;
+
+    DBHandler controller;
+
     int t_category = -1;
 
     @Override
@@ -75,6 +84,8 @@ public class ADD_Marker extends Activity {
         alpha.setAlpha(90);
         alpha = ((ImageView)findViewById(R.id.landmark_add_check)).getDrawable();
         alpha.setAlpha(90);
+
+        controller = new DBHandler(getApplicationContext());
     }
 
     @Override
@@ -284,24 +295,30 @@ public class ADD_Marker extends Activity {
             image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
         }
 
+        String result = "";
+
         if(t_category == 1) {
             String url = "http://52.79.121.208/diy/toilet_upload.php";
-            sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
+            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
         } else if(t_category == 2) {
             String url = "http://52.79.121.208/diy/wifi_upload.php";
-            sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), m_agency.getText().toString(), image_str);
+            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), m_agency.getText().toString(), image_str);
         } else if(t_category == 3) {
             String url = "http://52.79.121.208/diy/smoke_upload.php";
-            sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
+            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
         } else if(t_category == 4) {
             String url = "http://52.79.121.208/diy/landmark_upload.php";
-            sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp.getText().toString(), "", image_str);
+            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp.getText().toString(), "", image_str);
         } else if(t_category == 9) {
             String url = "http://52.79.121.208/diy/trash_upload.php";
-            sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp2.getText().toString(), "", image_str);
+            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp2.getText().toString(), "", image_str);
         }
 
+        parse_board(result);
+
         Log.d("Url","99");
+
+        controller.insert_diy(Integer.parseInt(diy_id),Double.parseDouble(LT),Double.parseDouble(LG),m_name.getText().toString(),diy_url,t_category);
 
         initialize();
     }
@@ -365,5 +382,29 @@ public class ADD_Marker extends Activity {
         group2 = null;
         m_exp = null;
         m_exp2 = null;
+    }
+
+    public void parse_board(String json) {
+
+        String gpa = " ";
+
+        try {
+            JSONArray JA = new JSONArray(json);
+            Log.d("json", "All contents : " + JA);
+
+            for (int i = 0; i < JA.length(); i++) {
+
+                JSONObject c = JA.getJSONObject(i);
+                Log.d("json", "each contents : " + c);
+
+                diy_id = c.getString("MarkerID");
+                diy_url = c.getString("url");
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("JUN", e.toString());
+        }
     }
 }

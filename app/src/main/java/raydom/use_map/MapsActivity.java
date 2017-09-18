@@ -340,17 +340,32 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                                     add_type = -1 ;
 
                                     Intent intent = new Intent(context, AddBoardingActivity.class);
+
+                                    Cursor c = controller.get_login_info();
+                                    c.moveToNext();
+
+                                    ID = c.getString(c.getColumnIndex("ID"));
+
                                     intent.putExtra("ID", ID);
+
+                                    Log.d("board","userID : "+  ID);
+
                                     intent.putExtra("LT",Double.toString(DIY_LT));
                                     intent.putExtra("LG",Double.toString(DIY_LG));
                                     startActivity(intent);
+
+                                    view_visible();
                                 }
                             }
+
+
                         })
                         .setNegativeButton("NO",new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id) { // right button
                                 mMap.clear();
                                 dialog.cancel();
+
+                                view_visible();
                             }
                         });
                 AlertDialog alert = alt_bld.create();
@@ -473,20 +488,54 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                     return false;
 
-                } else if (marker.getAlpha() == 0) {
+                } else if (marker.getZIndex() == 2.0) {
+                    mark_info.setVisibility(View.VISIBLE);
+                    mark_info_open = true;
+
+                    Cursor c = controller.get_diy(tmp_marker.getPosition().latitude, tmp_marker.getPosition().longitude);
+                    startManagingCursor(c);
+
+                    String pic_url = "";
+
+                    if(c.getCount() != 0) {
+                        pic_url = c.getString(c.getColumnIndex("url"));
+                    }
+
+                    if(!pic_url.isEmpty())
+                        Picasso.with(context)
+                                .load(pic_url)
+                                .transform(new CropCircleTransformation())
+                                .into(mark_image);
+
+                    final SendData diy_check = new SendData();
+
+                    final String checking_url = "http://52.79.121.208/diy/vote.php";
+
+                    c = controller.get_diy(marker.getPosition().latitude,marker.getPosition().longitude);
+
+                    int tmp_id = 0;
+
+                    if(c.getCount() != 0) {
+                        c.moveToNext();
+
+                        tmp_id = Integer.parseInt(c.getString(c.getColumnIndex("id")));
+                    }
+
+                    final int diy_id = tmp_id;
+
                     AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
                     alt_bld
                             .setMessage("Is this marker really in that location?")
                             .setCancelable(false)
                             .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) { // left button
-
+                                    diy_check.sendData12(checking_url,Integer.toString(diy_id),Integer.toString(category),"1");
                                     dialog.cancel();
                                 }
                             })
                             .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) { // right button
-
+                                    diy_check.sendData12(checking_url,Integer.toString(diy_id),Integer.toString(category),"0");
                                     dialog.cancel();
                                 }
                             });
@@ -494,6 +543,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     AlertDialog alert = alt_bld.create();
                     alert.setTitle("Select Type");
                     alert.setIcon(R.drawable.main_logo);
+                    alert.getWindow().setGravity(Gravity.BOTTOM);
                     alert.show();
 
                 } else {
@@ -617,6 +667,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void toilet_b_clicked(View v){
+
+        SendData tmp_send = new SendData();
+        tmp_send.sendData12("http://52.79.121.208/diy/vote.php","22","3","0");
 
         if(category != 1) {
             no_effect();
@@ -748,6 +801,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     public void personal_b_clicked(View v) {
         mMap.clear();
 
+        no_effect();
+
         Cursor c = controller.select_all_personal();
         startManagingCursor(c);
 
@@ -772,7 +827,17 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void board_b_clicked(View v) {
-        getData("http://52.79.121.208/board/board_read.php");
+
+        SendData board_send = new SendData();
+
+        board_send.sendData11("http://52.79.121.208/board/text_read.php","11");
+
+        String json = board_send.sendData2("http://52.79.121.208/board/board_read.php",Double.toString(here.getPosition().latitude)
+                ,Double.toString(here.getPosition().longitude));
+
+        Log.d("broad","send over : " +json);
+
+        parse_board(json);
 
         Button add_b = (Button)findViewById(R.id.board_add_button);
 
@@ -1032,6 +1097,9 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         mark_info.setVisibility(View.GONE);
         mark_info_open = false;
 
+        Button tmp_btn = (Button)findViewById(R.id.board_add_button);
+        tmp_btn.setVisibility(View.GONE);
+
         mMap.clear();
 
         category = 0;
@@ -1127,8 +1195,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 }
             }
 
-        } else if(category == 6) {
-
         } else {
 
             mMap.addMarker(new MarkerOptions().position(new LatLng(126.928117, 37.483867)).title("").zIndex(1.0f));
@@ -1144,8 +1210,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 int id = c.getInt(c.getColumnIndex("id"));
                 double lt = c.getDouble(c.getColumnIndex("latitude"));
                 double lg = c.getDouble(c.getColumnIndex("longitude"));
-                String name = c.getString(c.getColumnIndex("name"));
-                String url = c.getString(c.getColumnIndex("url"));
                 int bm = c.getInt(c.getColumnIndex("bm"));
 
                 if (id < 0) {
@@ -1165,8 +1229,21 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     }
                 }
             }
-        }
 
+            c = controller.select_all_diy();
+
+            while (c.moveToNext()) {
+                // c의 int가져와라 ( c의 컬럼 중 id) 인 것의 형태이다.
+                double lt = c.getDouble(c.getColumnIndex("latitude"));
+                double lg = c.getDouble(c.getColumnIndex("longitude"));
+                String name = c.getString(c.getColumnIndex("name"));
+
+                mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+                        .position(new LatLng(lt, lg)).title(name).zIndex(2.0f));
+
+            }
+
+        }
     }
 
     void show_stars(double gpa_num) {
@@ -1310,11 +1387,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         try {
             JSONArray JA = new JSONArray(json);
+            Log.d("json", "All contents : " + JA);
 
             for (int i = 0; i < JA.length(); i++) {
 
                 JSONObject c = JA.getJSONObject(i);
-                Log.d("gpa", "All contents : " + c);
+                Log.d("json", "each contents : " + c);
 
             }
 

@@ -23,8 +23,8 @@ public class SendData {
                    // 3 : smoking
                    // 4 : landmark
 
-    String LT_TAG = "longitude"; //longitude
-    String LG_TAG = "latitude"; //latitude
+    String LG_TAG = "longitude"; //longitude
+    String LT_TAG = "latitude"; //latitude
 
     String uID_TAG = "ID"; //id
     String uPW_TAG = "PW"; //pw
@@ -55,6 +55,9 @@ public class SendData {
 
     String title_TAG = "main";
     String content_TAG = "text";
+
+    String valid_TAG = "valid";
+    String category_TAG = "category";
 
     int check = -1;
 
@@ -175,9 +178,17 @@ public class SendData {
     }
 
     //send LT,LG data
-    public void sendData2(String url, String latitude, String longitude){
+    public String sendData2(String url, String latitude, String longitude){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String result = "";
+
+            int retCode = -1;
+
+            public String get_result() {
+                return result;
+            }
 
             @Override
             public Void doInBackground(String... params) {
@@ -203,7 +214,7 @@ public class SendData {
                     os.write( outputInBytes );
                     os.close();
 
-                    int retCode = conn.getResponseCode();
+                    retCode = conn.getResponseCode();
 
                     check = retCode;
                     Log.d("Ray","result1 : "+retCode);
@@ -220,6 +231,8 @@ public class SendData {
 
                     String res = response.toString();
 
+                    result = res;
+
                     Log.d("Ray","result 2 : "+res);
 
                 } catch (Exception e) {
@@ -230,23 +243,35 @@ public class SendData {
             }
         }
 
+        HttpUtil util = new HttpUtil();
+
         try {
             JSONObject jsonObject = new JSONObject();
 
             try {
                 jsonObject.put(LT_TAG, latitude);
                 jsonObject.put(LG_TAG, longitude);
+
+                Log.d("Debug11",jsonObject.toString());
             }catch (JSONException e){
 
             }
 
             String json = jsonObject.toString();
 
-            new HttpUtil().execute(url,json);
+            util.execute(url,json);
+
+            while(util.get_result().isEmpty()){
+                ;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        String result = util.get_result();
+
+        return result;
     }
 
     //send LT,LG and options for adding marker
@@ -255,6 +280,8 @@ public class SendData {
         class HttpUtil extends AsyncTask<String, Void, Void> {
 
             String result;
+
+            int rCode = -1;
 
             public String get_Result() {
                 return result;
@@ -291,7 +318,8 @@ public class SendData {
 
                     int retCode = conn.getResponseCode();
 
-                    check = retCode;
+                    rCode = retCode;
+
                     Log.d("Ray","result1 : "+retCode);
 
                     InputStream is = conn.getInputStream();
@@ -377,17 +405,22 @@ public class SendData {
 
             util.execute(url,json);
 
-            Log.d("Url","10");
+            while(util.rCode == -1) {
+                ;
+            }
 
+            Log.d("Url","10");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return util.get_Result();
+        String result = util.get_Result();
+
+        return result;
     }
 
-    //send LT,LG,CT for getting gpa
+    //send markID for getting gpa
     public String sendData4(String url, int id){
 
         String rt;
@@ -949,7 +982,7 @@ public class SendData {
         return result;
     }
 
-    //send LT,LG ,name for personal marker
+    //send LT, LG,ID, content for board
     public void sendData10(String url, String latitude, String longitude, String title, String userID, String content){
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
@@ -1009,11 +1042,11 @@ public class SendData {
             JSONObject jsonObject = new JSONObject();
 
             try {
-                jsonObject.put(userID_TAG, userID);
                 jsonObject.put(LT_TAG, latitude);
                 jsonObject.put(LG_TAG, longitude);
                 jsonObject.put(title_TAG,title);
                 jsonObject.put(content_TAG,content);
+                jsonObject.put(userID_TAG, userID);
             }catch (JSONException e){
 
             }
@@ -1027,5 +1060,195 @@ public class SendData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //send BoardID for getting board contents
+    public String sendData11(String url, String boardID){
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String result = "";
+
+            int retCode = -1;
+
+            public String get_result() {
+                return result;
+            }
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+                    OutputStream os = conn.getOutputStream();
+                    os.write( outputInBytes );
+                    os.close();
+
+                    retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    String res = response.toString();
+
+                    result = res;
+
+                    Log.d("Ray","result 2 : "+res);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        HttpUtil util = new HttpUtil();
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put("boardID", boardID);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            util.execute(url,json);
+
+            while(util.get_result().isEmpty()){
+                ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String result = util.get_result();
+
+        return result;
+    }
+
+    //send integer for checking diy is true or false
+    public String sendData12(String url, String markID, String category, String valid){
+
+        class HttpUtil extends AsyncTask<String, Void, Void> {
+
+            String result = "";
+
+            int retCode = -1;
+
+            public String get_result() {
+                return result;
+            }
+
+            @Override
+            public Void doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+
+                try {
+
+                    URL url = new URL(uri);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                    conn.setConnectTimeout(2000);
+                    conn.setReadTimeout(2000);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type","application/json");
+
+                    byte[] outputInBytes = params[1].getBytes("UTF-8");
+                    OutputStream os = conn.getOutputStream();
+                    os.write( outputInBytes );
+                    os.close();
+
+                    retCode = conn.getResponseCode();
+
+                    check = retCode;
+                    Log.d("Ray","result1 : "+retCode);
+
+                    InputStream is = conn.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                        response.append('\r');
+                    }
+                    br.close();
+
+                    String res = response.toString();
+
+                    result = res;
+
+                    Log.d("Ray","result 2 : "+res);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }
+
+        HttpUtil util = new HttpUtil();
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put(valid_TAG, valid);
+                jsonObject.put(mark_ID_TAG,markID);
+                jsonObject.put(category_TAG,category);
+            }catch (JSONException e){
+
+            }
+
+            String json = jsonObject.toString();
+
+            util.execute(url,json);
+
+            while(util.get_result().isEmpty()){
+                ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String result = util.get_result();
+
+        return result;
     }
 }

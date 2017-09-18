@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -30,7 +31,10 @@ public class AddBoardingActivity extends Activity {
         setContentView(R.layout.add_board);
 
         Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
+        userID = intent.getStringExtra("ID");
+
+        Log.d("boarding",userID);
+
         lt = intent.getStringExtra("LT");
         lg = intent.getStringExtra("LG");
 

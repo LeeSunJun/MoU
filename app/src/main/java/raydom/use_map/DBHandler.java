@@ -62,11 +62,12 @@ public class DBHandler {
         Log.d("insert","name : "+ name);
     }
 
-    public void insert_diy(double lt, double lg, String name, String url, int category) {
+    public void insert_diy(int id, double lt, double lg, String name, String url, int category) {
         db = helper.getWritableDatabase(); // db 객체를 얻어온다. 쓰기 가능
 
         ContentValues values = new ContentValues();
 
+        values.put("id",id);
         values.put("latitude", lt);
         values.put("longitude", lg);
         values.put("name", name);
@@ -188,6 +189,13 @@ public class DBHandler {
     public Cursor get_login_info() {
         db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
         Cursor c = db.rawQuery("select * from Login", null);
+
+        return c;
+    }
+
+    public Cursor get_diy(double lt, double lg) {
+        db = helper.getReadableDatabase(); // db객체를 얻어온다. 읽기 전용
+        Cursor c = db.rawQuery("select * from DiyMarker where latitude = "+ lt + " and longitude = " + lg, null);
 
         return c;
     }
