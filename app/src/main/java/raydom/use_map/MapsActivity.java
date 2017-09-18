@@ -371,7 +371,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                             }
                         });
                 AlertDialog alert = alt_bld.create();
-                alert.setTitle("Select Type");
+                alert.setTitle("Adding Sequenec");
                 alert.setIcon(R.drawable.main_logo);
                 alert.getWindow().setGravity(Gravity.BOTTOM);
                 alert.show();
@@ -548,7 +548,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                             });
 
                     AlertDialog alert = alt_bld.create();
-                    alert.setTitle("Select Type");
+                    alert.setTitle("Check Validation");
                     alert.setIcon(R.drawable.main_logo);
                     alert.getWindow().setGravity(Gravity.BOTTOM);
                     alert.show();
