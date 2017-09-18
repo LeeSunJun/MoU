@@ -26,6 +26,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -355,6 +356,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 AlertDialog alert = alt_bld.create();
                 alert.setTitle("Select Type");
                 alert.setIcon(R.drawable.main_logo);
+                alert.getWindow().setGravity(Gravity.BOTTOM);
                 alert.show();
             }
         });
