@@ -1082,6 +1082,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         b.setVisibility(View.GONE);
         b = findViewById(R.id.Search);
         b.setVisibility(View.GONE);
+        b = findViewById(R.id.chat_button);
+        b.setVisibility(View.GONE);
     }
 
     public void view_visible(){
@@ -1092,6 +1094,8 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         b = findViewById(R.id.Address);
         b.setVisibility(View.VISIBLE);
         b = findViewById(R.id.Search);
+        b.setVisibility(View.VISIBLE);
+        b = findViewById(R.id.chat_button);
         b.setVisibility(View.VISIBLE);
     }
 
