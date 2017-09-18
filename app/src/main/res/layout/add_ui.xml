@@ -94,63 +94,13 @@
         android:layout_margin="20dp"
         android:visibility="gone"/>
 
-    <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/landmark_add"
-        android:layout_below="@+id/category_Q"
-        android:layout_toRightOf="@id/smoke_add"
-        android:onClick="landmark_add_clicked"
-        android:background="#00FFFFFF"
-        android:padding="0sp"
-        android:scaleType="centerCrop"
-        android:layout_margin="20dp"
-        android:src="@drawable/final_landmark"/>
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/landmark_add_check"
-        android:layout_below="@+id/category_Q"
-        android:layout_toRightOf="@id/smoke_add"
-        android:src="@drawable/check"
-        android:padding="0sp"
-        android:scaleType="centerCrop"
-        android:layout_margin="20dp"
-        android:visibility="gone"/>
-
-    <ImageButton
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/trash_add"
-        android:layout_below="@+id/category_Q"
-        android:layout_toRightOf="@id/landmark_add"
-        android:onClick="trash_add_clicked"
-        android:background="#00FFFFFF"
-        android:padding="0sp"
-        android:scaleType="centerCrop"
-        android:layout_margin="20dp"
-        android:src="@drawable/trash_bin"/>
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:id="@+id/trash_add_check"
-        android:layout_below="@+id/category_Q"
-        android:layout_toRightOf="@id/landmark_add"
-        android:src="@drawable/check"
-        android:padding="0sp"
-        android:scaleType="centerCrop"
-        android:layout_margin="20dp"
-        android:visibility="gone"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="40dp"
         android:text=".\n.\n."
         android:id="@+id/skip"
-        android:layout_below="@+id/landmark_add"
+        android:layout_below="@+id/smoke_add"
         android:layout_centerHorizontal="true"/>
 
     <!-- toilet setting -->

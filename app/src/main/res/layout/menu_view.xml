@@ -317,20 +317,24 @@
                 android:layout_weight="1.4"
                 android:orientation="horizontal">
 
-                <ImageButton
+                <Button
                     android:id="@+id/bm_adding"
+                    android:text="Personal Add"
                     android:layout_width="0sp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:layout_margin="20sp"
+                    android:background="@drawable/empty_button"
                     android:onClick="bm_add_clicked"/>
 
-                <ImageButton
+                <Button
                     android:id="@+id/marker_adding"
+                    android:text="DIY Add"
                     android:layout_width="0sp"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:layout_margin="20sp"
+                    android:background="@drawable/empty_button"
                     android:onClick="DIY_add_clicked"/>
 
             </LinearLayout>

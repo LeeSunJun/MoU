@@ -279,7 +279,7 @@ public class SendData {
 
         class HttpUtil extends AsyncTask<String, Void, Void> {
 
-            String result;
+            String result = "1";
 
             int rCode = -1;
 
@@ -319,8 +319,9 @@ public class SendData {
                     int retCode = conn.getResponseCode();
 
                     rCode = retCode;
+                    check = retCode;
 
-                    Log.d("Ray","result1 : "+retCode);
+                    Log.d("Ray","retcode : "+retCode);
 
                     InputStream is = conn.getInputStream();
                     BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -332,10 +333,12 @@ public class SendData {
                     }
                     br.close();
 
+
                     String res = response.toString();
+
                     result = res;
 
-                    Log.d("Ray","result 2 : "+res);
+                    Log.d("Ray","result : "+result);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -405,7 +408,7 @@ public class SendData {
 
             util.execute(url,json);
 
-            while(util.rCode == -1) {
+            while(get_check() == -1) {
                 ;
             }
 
@@ -415,7 +418,16 @@ public class SendData {
             e.printStackTrace();
         }
 
-        String result = util.get_Result();
+        while(get_check() == -1) {
+            ;
+        }
+
+        String result = "1";
+
+        while(result == "1")
+            result = util.get_Result();
+
+        Log.d("DIY","final result" + util.get_Result());
 
         return result;
     }

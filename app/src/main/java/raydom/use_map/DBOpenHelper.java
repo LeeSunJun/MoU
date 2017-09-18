@@ -49,7 +49,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                     "latitude real, " +
                     "name text, " +
                     "url text, " +
-                    "valid integer" +
+                    "valid integer, " +
                     "category integer);";
 
             db.execSQL(sql);

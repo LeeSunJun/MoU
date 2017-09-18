@@ -20,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -81,8 +80,6 @@ public class ADD_Marker extends Activity {
         alpha = ((ImageView)findViewById(R.id.wifi_add_check)).getDrawable();
         alpha.setAlpha(90);
         alpha = ((ImageView)findViewById(R.id.smoke_add_check)).getDrawable();
-        alpha.setAlpha(90);
-        alpha = ((ImageView)findViewById(R.id.landmark_add_check)).getDrawable();
         alpha.setAlpha(90);
 
         controller = new DBHandler(getApplicationContext());
@@ -200,9 +197,6 @@ public class ADD_Marker extends Activity {
 
         m_name = (EditText)findViewById(R.id.landmark_name_edit);
 
-        check = (ImageView)findViewById(R.id.landmark_add_check);
-        check.setVisibility(View.VISIBLE);
-
         form = (RelativeLayout)findViewById(R.id.setting_landmark);
         form.setVisibility(View.VISIBLE);
 
@@ -220,9 +214,6 @@ public class ADD_Marker extends Activity {
         b = (ImageButton)findViewById(R.id.pic_trash_button);
 
         m_name = (EditText)findViewById(R.id.trash_name_edit);
-
-        check = (ImageView)findViewById(R.id.trash_add_check);
-        check.setVisibility(View.VISIBLE);
 
         form = (RelativeLayout)findViewById(R.id.setting_trash);
         form.setVisibility(View.VISIBLE);
@@ -244,10 +235,10 @@ public class ADD_Marker extends Activity {
     public void submit_clicked(View v) {
         Intent intent = new Intent();
 
-        intent.putExtra("result_category",t_category);
+        /*intent.putExtra("result_category",t_category);
         intent.putExtra("result_title",m_name.getText());
         intent.putExtra("result_lt",LT);
-        intent.putExtra("result_lg",LG);
+        intent.putExtra("result_lg",LG);*/
 
         setResult(RESULT_OK,intent);
 
@@ -306,17 +297,15 @@ public class ADD_Marker extends Activity {
         } else if(t_category == 3) {
             String url = "http://52.79.121.208/diy/smoke_upload.php";
             result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), Integer.toString(data1), Integer.toString(data2), image_str);
-        } else if(t_category == 4) {
-            String url = "http://52.79.121.208/diy/landmark_upload.php";
-            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp.getText().toString(), "", image_str);
-        } else if(t_category == 9) {
-            String url = "http://52.79.121.208/diy/trash_upload.php";
-            result = sendData.sendData3(url, LT, LG, m_name.getText().toString(), m_exp2.getText().toString(), "", image_str);
         }
 
-        parse_board(result);
+        while(sendData.get_check() == -1){
+            ;
+        }
 
-        Log.d("Url","99");
+        Log.d("DIY","result : " + result);
+
+        parse_board(result);
 
         controller.insert_diy(Integer.parseInt(diy_id),Double.parseDouble(LT),Double.parseDouble(LG),m_name.getText().toString(),diy_url,t_category);
 
@@ -341,26 +330,12 @@ public class ADD_Marker extends Activity {
         startActivityForResult(Intent.createChooser(intent,"Select Picture"),cp.PICK_IMAGE);
     }
 
-    public  void pic_lb_clicked(View v) {
-        CameraPhoto cp = new CameraPhoto();
-        Intent intent = cp.selectPicture();
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"),cp.PICK_IMAGE);
-    }
-
-    public  void pic_trb_clicked(View v) {
-        CameraPhoto cp = new CameraPhoto();
-        Intent intent = cp.selectPicture();
-        startActivityForResult(Intent.createChooser(intent,"Select Picture"),cp.PICK_IMAGE);
-    }
-
     public void no_effect() {
         check = (ImageView)findViewById(R.id.toilet_add_check);
         check.setVisibility(View.GONE);
         check = (ImageView)findViewById(R.id.wifi_add_check);
         check.setVisibility(View.GONE);
         check = (ImageView)findViewById(R.id.smoke_add_check);
-        check.setVisibility(View.GONE);
-        check = (ImageView)findViewById(R.id.landmark_add_check);
         check.setVisibility(View.GONE);
     }
 
@@ -386,21 +361,14 @@ public class ADD_Marker extends Activity {
 
     public void parse_board(String json) {
 
-        String gpa = " ";
-
         try {
-            JSONArray JA = new JSONArray(json);
-            Log.d("json", "All contents : " + JA);
+            JSONObject J = new JSONObject(json);
+            Log.d("json", "All contents : " + J);
 
-            for (int i = 0; i < JA.length(); i++) {
+            diy_id = J.getString("MarkerID");
+            diy_url = J.getString("url");
 
-                JSONObject c = JA.getJSONObject(i);
-                Log.d("json", "each contents : " + c);
-
-                diy_id = c.getString("MarkerID");
-                diy_url = c.getString("url");
-            }
-
+            Log.d("DIY","ID : " + diy_id + " url : " + diy_url );
 
         } catch (JSONException e) {
             e.printStackTrace();

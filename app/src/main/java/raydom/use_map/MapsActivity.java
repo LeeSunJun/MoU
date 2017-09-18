@@ -145,15 +145,17 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         } else if (requestCode == 4) {
 
-            double lt = Double.parseDouble(data.getStringExtra("result_lt"));
+           /* double lt = Double.parseDouble(data.getStringExtra("result_lt"));
             double lg = Double.parseDouble(data.getStringExtra("result_lg"));
             int ct = data.getIntExtra("result_category",0);
+
             String title = data.getStringExtra("result_title");
+
             int bm = 0;
             int id = 0 - total;
             String url = "http://i.imgur.com/NmPyWw4.png";
 
-            controller.insert(id,lt, lg, title, url, bm, ct);
+            controller.insert(id,lt, lg, title, url, bm, ct);*/
 
             Toast.makeText(this, "Marker Adding is success", Toast.LENGTH_SHORT).show();
         } else if( requestCode == 7){
@@ -324,7 +326,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 AlertDialog.Builder alt_bld = new AlertDialog.Builder(context);
                 alt_bld
-                        .setMessage("here?")
+                        .setMessage("This is the right location that you want?")
                         .setCancelable(false)
                         .setPositiveButton("YES", new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){ // left button
@@ -477,7 +479,11 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 if (marker.getPosition().latitude == here.getPosition().latitude && marker.getPosition().longitude == here.getPosition().longitude) {
                     return false;
 
-                } else if (add_type == 1) {
+                }else if (add_type == 1 && marker.getZIndex() == 2) {
+                    Toast.makeText(context, "You cant change DIY marker to personal marker", Toast.LENGTH_SHORT).show();
+                    add_type = -1;
+                }
+                else if (add_type == 1) {
                     personal_add();
                     add_type = -1;
 
@@ -498,6 +504,7 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                     String pic_url = "";
 
                     if(c.getCount() != 0) {
+                        c.moveToNext();
                         pic_url = c.getString(c.getColumnIndex("url"));
                     }
 
@@ -827,54 +834,12 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     public void board_b_clicked(View v) {
+        Intent intent = new Intent(context,AddBoardingActivity.class);
 
-        SendData board_send = new SendData();
+        intent.putExtra("here_lt",Double.toString(here.getPosition().latitude));
+        intent.putExtra("here_lg",Double.toString(here.getPosition().longitude));
 
-        board_send.sendData11("http://52.79.121.208/board/text_read.php","11");
-
-        String json = board_send.sendData2("http://52.79.121.208/board/board_read.php",Double.toString(here.getPosition().latitude)
-                ,Double.toString(here.getPosition().longitude));
-
-        Log.d("broad","send over : " +json);
-
-        parse_board(json);
-
-        Button add_b = (Button)findViewById(R.id.board_add_button);
-
-        add_b.setVisibility(View.VISIBLE);
-
-        category = 6;
-
-        if(mGPS.isChecked()) {
-            here = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.here_1)).position(new LatLng(LT, LG)).title("You").zIndex(10.0f));
-            here.setVisible(true);
-        }
-
-        LinearLayout drawer = (LinearLayout)findViewById(R.id.drawer);
-
-        if(drawer.getVisibility() == View.VISIBLE)
-            drawer.setVisibility(View.GONE);
-    }
-
-    public void board_add_clicked(View v) {
-
-        if(ID.compareTo("Guest") !=0 ) {
-
-            Toast.makeText(this, "Click screen you want to add", Toast.LENGTH_SHORT).show();
-
-            add_type = 3;
-
-            mMap.clear();
-
-            View t = findViewById(R.id.cover);
-            t.setVisibility(View.VISIBLE);
-            view_invisible();
-
-            getClick();
-        }
-        else{
-            Toast.makeText(this, "You have to Log in first", Toast.LENGTH_SHORT).show();
-        }
+        startActivity(intent);
     }
 
     public void setting_clicked(View v){
@@ -1237,10 +1202,17 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
                 double lt = c.getDouble(c.getColumnIndex("latitude"));
                 double lg = c.getDouble(c.getColumnIndex("longitude"));
                 String name = c.getString(c.getColumnIndex("name"));
+                String ct = c.getString(c.getColumnIndex("category"));
+                int valid = c.getInt(c.getColumnIndex("valid"));
 
-                mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
-                        .position(new LatLng(lt, lg)).title(name).zIndex(2.0f));
+                int m_ct = Integer.parseInt(ct);
 
+                if(m_ct == category) {
+                    if(valid == 1) {
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                                .position(new LatLng(lt, lg)).title(name).zIndex(2.0f));
+                    }
+                }
             }
 
         }
@@ -1379,28 +1351,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
         g.execute(url);
 
         //parse_board(g.getMyJSON());
-    }
-
-    public void parse_board(String json) {
-
-        String gpa = " ";
-
-        try {
-            JSONArray JA = new JSONArray(json);
-            Log.d("json", "All contents : " + JA);
-
-            for (int i = 0; i < JA.length(); i++) {
-
-                JSONObject c = JA.getJSONObject(i);
-                Log.d("json", "each contents : " + c);
-
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.d("JUN", e.toString());
-        }
     }
 
 }
